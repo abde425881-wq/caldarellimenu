@@ -539,6 +539,10 @@
                         {"name": "Red Bull Blue Edition (frutti rossi)", "price": 4.5},
                         {"name": "Red Bull Summer Edition (fiori di sambuco e curuba)", "price": 4.5},
                         {"name": "Red Bull Apricot Edition (albicocca e fragola)", "price": 4.5},
+                        {"name": "Fanta", "price": 3.0},
+                        {"name": "Sprite", "price": 3.0},
+                        {"name": "Estathè limone/pesca", "price": 3.0},
+                        {"name": "Thè zero", "price": 3.5},
                         {"name": "Succhi di frutta", "price": 3.0},
                         {"name": "Spremuta di Arancia", "price": 4.0},
                         {"name": "Spremuta di Melograno", "price": 5.0},
@@ -549,6 +553,26 @@
                         {"name": "Tropical", "price": 5.0},
                         {"name": "Latte di mandorla", "price": 4.0},
                         {"name": "Coca cola/Coca cola zero", "price": 3.0}
+                    ]
+                },
+                {
+                    "id": "aperitivi",
+                    "name": "Aperitivi",
+                    "icon": "🍹",
+                    "items": [
+                        {"name": "Tassoni", "price": 5.0},
+                        {"name": "Lemon soda", "price": 5.0},
+                        {"name": "Schweppes tonica/lemon/arancia", "price": 5.0},
+                        {"name": "Tonica Fentimans", "price": 5.0},
+                        {"name": "Bitter bianco", "price": 5.0},
+                        {"name": "Bitter Rosso", "price": 5.0},
+                        {"name": "Crodino", "price": 5.0},
+                        {"name": "Crodino frutti rossi", "price": 5.0},
+                        {"name": "Cocktail San Pellegrino bianco/rosso", "price": 5.0},
+                        {"name": "Aperol Soda", "price": 5.0},
+                        {"name": "Campari soda", "price": 5.0},
+                        {"name": "Apertas", "price": 6.0},
+                        {"name": "Bevande Bio Galvanina", "price": 5.0}
                     ]
                 },
                 {
@@ -754,7 +778,7 @@
         
         function generateMenuOverlay() {
             const container = document.getElementById('menuCategories');
-            container.innerHTML = ''; // Pulisci prima
+            container.innerHTML = '';
             
             const allBtn = document.createElement('button');
             allBtn.className = 'menu-category-btn';
@@ -773,7 +797,7 @@
         
         function generateMenu() {
             const container = document.getElementById('menuContainer');
-            container.innerHTML = ''; // Pulisci prima
+            container.innerHTML = '';
             
             menuData.categories.forEach(cat => {
                 const section = document.createElement('section');
@@ -876,7 +900,6 @@
             }
         });
         
-        // Inizializza tutto
         generateMenuOverlay();
         generateMenu();
     </script>
