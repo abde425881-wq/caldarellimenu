@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALDARELLI - Menù Digitale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #c9a962;
+            --accent: #e63946;
+            --light: #f8f9fa;
+            --dark: #0d0d0d;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary);
+            position: relative;
+        }
+        
+        .redbull-banner {
+            background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-bottom: 2px solid #c9a962;
+        }
+        
+        .redbull-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .bar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+        
+        .bar-location {
+            font-size: 1rem;
+            color: #888;
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+        
+        /* MENU HAMBURGER */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: var(--secondary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--dark);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        /* OVERLAY MENU */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 13, 13, 0.98);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .menu-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .menu-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .menu-category-btn {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .menu-category-btn:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            transform: translateX(10px);
+        }
+        
+        .menu-category-btn .icon {
+            font-size: 1.5rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .category {
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .category-icon { font-size: 2rem; }
+        
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+        
+        .subcategory { margin: 20px 0; }
+        
+        .subcategory-title {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 15px;
+            font-style: italic;
+            padding-left: 10px;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(201, 169, 98, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            background: rgba(201, 169, 98, 0.1);
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+        
+        .item-info { flex: 1; }
+        
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 5px;
+        }
+        
+        .item-description {
+            font-size: 0.85rem;
+            color: #888;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        
+        .item-note {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-top: 5px;
+        }
+        
+        .item-price {
+            text-align: right;
+            margin-left: 15px;
+        }
+        
+        .price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .price-dual {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .price-small {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .back-to-menu {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--secondary);
+            color: var(--dark);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 2rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-menu.visible {
+            display: flex;
+        }
+        
+        .back-to-menu:hover {
+            transform: translateY(-5px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            margin-top: 50px;
+            border-top: 1px solid rgba(201, 169, 98, 0.3);
+        }
+        
+        .footer-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .bar-title { font-size: 1.8rem; }
+            .category-title { font-size: 1.4rem; }
+            .menu-item { flex-direction: column; gap: 10px; }
+            .item-price { text-align: left; margin-left: 0; }
+            .menu-category-btn { font-size: 0.9rem; padding: 12px 15px; }
+            .menu-title { font-size: 1.5rem; }
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
+    <div class="menu-overlay" id="menuOverlay">
+        <h2 class="menu-title">Seleziona Categoria</h2>
+        <div class="menu-categories" id="menuCategories"></div>
+    </div>
+    
+    <header class="header">
+        <div class="redbull-banner">
+            <div class="redbull-text">CHE ALI PREFERISCI?</div>
+        </div>
+        <h1 class="bar-title">CALDARELLI</h1>
+        <p class="bar-location">MERCATO SAN SEVERINO</p>
+    </header>
+    
+    <main class="container" id="menuContainer"></main>
+    
+    <button class="back-to-menu" id="backToMenu" onclick="showAllCategories()" title="Torna al menu">☰</button>
+    
+    <footer class="footer">
+        <p class="footer-text">CALDARELLI - Mercato San Severino</p>
+        <p class="footer-text" style="margin-top: 10px; font-size: 0.8rem;">Menù digitale - Scansiona il QR code</p>
+    </footer>
+    
+    <script>
+        const menuData = {
+  "bar_name": "CALDARELLI",
+  "location": "MERCATO SAN SEVERINO",
+  "header_image": "https://www.redbull.com/images/cms/navigation/redbull-logo.svg",
+  "header_text": "CHE ALI PREFERISCI?",
+  "categories": [
+    {
+      "id": "caffetteria-classica",
+      "name": "Caffetteria Classica",
+      "icon": "☕",
+      "items": [
+        {"name": "Caffè espresso Kenon", "price": 1.5},
+        {"name": "Caffè decaffeinato Kenon", "price": 1.8},
+        {"name": "Caffè con panna", "price": 3.0},
+        {"name": "Caffè corretto", "price": 1.8},
+        {"name": "Cappuccino", "price": 2.0},
+        {"name": "Caffè orzo", "price": 2.0},
+        {"name": "Caffè Ginseng", "price": 2.0},
+        {"name": "Caffè Shakerato (Classico)", "price": 2.5},
+        {"name": "Latte macchiato", "price": 1.8},
+        {"name": "Latte bianco", "price": 1.8},
+        {"name": "Crema caffè", "price": 3.5}
+      ]
+    },
+    {
+      "id": "caffetteria-speciale",
+      "name": "Caffetteria Speciale",
+      "icon": "🥤",
+      "subcategories": [
+        {
+          "name": "Caldi",
+          "items": [
+            {"name": "Thè e infusi Whittington", "price": 4.0},
+            {"name": "L'antica Cioccolateria Eraclea", "price": 5.0, "note": "Prezzo aggiornato"},
+            {"name": "Caffè Cocco di mamma", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Morbidezza di Bronte", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Dolce & Salato", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Fiesta", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Pan di Stelle", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Oreo", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Kinder", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè nocciole Avellane", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Raffaello", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Nutella", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Cioccolato bianco", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Caffè Brasiliano", "price_caldi": 3.5, "price_freddi": 4.0},
+            {"name": "Irish Coffee", "price_caldi": 3.5, "price_freddi": 4.0}
+          ]
+        },
+        {
+          "name": "Freddi - Ice Coffee",
+          "items": [
+            {"name": "Ice Coffee Cocco di mamma", "price": 5.0},
+            {"name": "Ice Coffee Bronte", "price": 5.0},
+            {"name": "Ice Coffee Dolce&Salato", "price": 5.0},
+            {"name": "Ice Coffee Nocciole Avellane", "price": 5.0},
+            {"name": "Ice Coffee Kinder", "price": 5.0}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bibite",
+      "name": "Bibite",
+      "icon": "🥤",
+      "items": [
+        {"name": "Red Bull", "price": 3.5},
+        {"name": "Red Bull Sugarfree", "price": 3.5},
+        {"name": "Red Bull Red Edition (anguria)", "price": 3.5},
+        {"name": "Red Bull White Edition (cocco e açai)", "price": 3.5},
+        {"name": "Red Bull Green Edition (dragon fruit)", "price": 3.5},
+        {"name": "Red Bull Blue Edition (frutti rossi)", "price": 3.5},
+        {"name": "Red Bull Summer Edition (fiori di sambuco e curuba)", "price": 3.5},
+        {"name": "Red Bull Apricot Edition (albicocca e fragola)", "price": 3.5},
+        {"name": "Succhi di frutta", "price": 3.0},
+        {"name": "Spremuta di Arancia", "price": 4.0},
+        {"name": "Spremuta di Melograno", "price": 5.0},
+        {"name": "Chinotto San Pellegrino", "price": 5.0},
+        {"name": "Bacardi Breezer", "price": 5.0},
+        {"name": "Latte e menta", "price": 4.0},
+        {"name": "Orzata", "price": 4.0},
+        {"name": "Tropical", "price": 5.0},
+        {"name": "Latte di mandorla", "price": 4.0},
+        {"name": "Coca cola/Coca cola zero", "price": 3.0}
+      ]
+    },
+    {
+      "id": "spritz",
+      "name": "Le Nostre Proposte Spritz",
+      "icon": "🍹",
+      "items": [
+        {"name": "Bull Spritz", "price": 7.0, "description": "Red Bull e Aperol"},
+        {"name": "Aperol Spritz", "price": 7.0},
+        {"name": "Campari Spritz", "price": 7.0},
+        {"name": "Hugo St. Germain Spritz", "price": 7.0},
+        {"name": "Dolce & Salato Spritz", "price": 8.0, "description": "Aperol, St. Germain, Gin fifty pounds, sour, prosecco"},
+        {"name": "Spritz Salerno", "price": 8.0, "description": "Gin Bloom, Limoncello, Falanghina, Aperol, Sour"},
+        {"name": "Don Franco", "price": 7.0, "description": "Aperol, Vermouth antica formula, prosecco franciacorta, liquore all'arancia, ginger beer"},
+        {"name": "Al Caldarelli", "price": 9.0, "description": "Bourbon whisky, vermouth rosso infuso alla vaniglia, cannella, cioccolato fondente"},
+        {"name": "Sweet Spritz al lampone", "price": 8.0, "description": "Aperol, vodka Beluga, purea di lamponi e more, falanghina, soda"},
+        {"name": "Martini Ruby Spritz", "price": 7.0},
+        {"name": "Martini Ambry Spritz", "price": 7.0},
+        {"name": "Martini Rosato Spritz", "price": 7.0},
+        {"name": "Don Dihhan", "price": 7.0}
+      ]
+    },
+    {
+      "id": "classici",
+      "name": "I Grandi Classici",
+      "icon": "🥃",
+      "items": [
+        {"name": "Americano", "price": 7.0},
+        {"name": "Boulevardier", "price": 7.0},
+        {"name": "Corpse reviver", "price": 7.0},
+        {"name": "Cuba Libre", "price": 7.0},
+        {"name": "Dark'n stormy", "price": 7.0},
+        {"name": "Gin Fizz", "price": 7.0},
+        {"name": "Gin tonic", "price": "prezzo variabile"},
+        {"name": "Gin Gordon & Tonic", "price": 7.0},
+        {"name": "Manhattan", "price": 7.0},
+        {"name": "Martini cocktail", "price": 7.0},
+        {"name": "Mint Julep", "price": 7.0},
+        {"name": "Negroni", "price": 7.0},
+        {"name": "Sazerac", "price": 7.0},
+        {"name": "Tequila sunrise", "price": 7.0},
+        {"name": "Whiskey sour", "price": 7.0},
+        {"name": "White russian", "price": 7.0},
+        {"name": "Tom collins", "price": 7.0},
+        {"name": "Sidecar", "price": 7.0}
+      ]
+    },
+    {
+      "id": "virgin",
+      "name": "Proposte Virgin",
+      "icon": "🍸",
+      "items": [
+        {"name": "Scarlet Fizz", "price": 7.0},
+        {"name": "Mojito Caldarelli", "price": 7.0},
+        {"name": "Esotica", "price": 7.0},
+        {"name": "The passion cooler", "price": 7.0},
+        {"name": "Virgin colada caldarelli", "price": 7.0},
+        {"name": "Canarino", "price": 7.0},
+        {"name": "Virgin Mule", "price": 7.0},
+        {"name": "Caipiroska", "price": 7.0},
+        {"name": "Fresa", "price": 7.0},
+        {"name": "Virgin Garibaldi", "price": 7.0},
+        {"name": "Virgin del barman", "price": 7.0}
+      ]
+    },
+    {
+      "id": "negroni",
+      "name": "I Nostri Negroni",
+      "icon": "🥃",
+      "items": [
+        {"name": "Garnet sbagliato", "price": 8.0},
+        {"name": "Negroni del presidente", "price": 9.0},
+        {"name": "Negroni 1808", "price": 8.0},
+        {"name": "Negroni segreto", "price": 9.0},
+        {"name": "Negroni don't kill my vibe", "price": 10.0, "description": "(non uccidere la mia atmosfera)"},
+        {"name": "L'age d'or negroni", "price": 9.0},
+        {"name": "Negroni bianco", "price": 8.0},
+        {"name": "Pisco negroni", "price": 9.0},
+        {"name": "Negroni bloom", "price": 9.0},
+        {"name": "Negroni vintage", "price": 9.0},
+        {"name": "Negroni agrumato", "price": 9.0}
+      ]
+    },
+    {
+      "id": "stagione",
+      "name": "Solo Durante il Periodo",
+      "icon": "🍓",
+      "items": [
+        {"name": "Fragola con panna", "price": 5.0}
+      ]
+    },
+    {
+      "id": "estratti",
+      "name": "Componi il Tuo Estratto",
+      "icon": "🥤",
+      "items": [
+        {"name": "Centrifuga di frutta", "price": 5.0}
+      ]
+    },
+    {
+      "id": "liquori",
+      "name": "Liquori",
+      "icon": "🥃",
+      "items": [
+        {"name": "Baileys Original", "price": 3.5},
+        {"name": "Baileys Choccolate", "price": 3.5},
+        {"name": "Coca Buton", "price": 4.0},
+        {"name": "Drambuie", "price": 4.0},
+        {"name": "Amaretto di Saronno", "price": 3.5},
+        {"name": "Batida de Coco", "price": 3.5},
+        {"name": "Malibu", "price": 3.5},
+        {"name": "Sheridan's", "price": 3.5},
+        {"name": "Kahlua", "price": 3.5},
+        {"name": "Midori", "price": 3.5},
+        {"name": "Passoa", "price": 3.5},
+        {"name": "Southern Comfort", "price": 3.5},
+        {"name": "Cointreau", "price": 3.5},
+        {"name": "Limoncello", "price": 3.5},
+        {"name": "Meloncello", "price": 3.5},
+        {"name": "Finocchietto", "price": 3.5},
+        {"name": "Liquirizia", "price": 3.5},
+        {"name": "Fragolino", "price": 3.5},
+        {"name": "Passito di Pantelleria", "price": 4.0}
+      ]
+    },
+    {
+      "id": "amari",
+      "name": "Amari",
+      "icon": "🍷",
+      "items": [
+        {"name": "Amaro Averna", "price": 3.5},
+        {"name": "Amaro Cynar", "price": 3.5},
+        {"name": "Amaro del Capo", "price": 3.5},
+        {"name": "Amaro Lucano", "price": 3.5},
+        {"name": "Amaro Montenegro", "price": 3.5},
+        {"name": "Amaro Of Bonollo", "price": 4.0},
+        {"name": "Amaro Ramazzotti", "price": 3.5},
+        {"name": "Borsci S. Marzano", "price": 3.5},
+        {"name": "Branca Menta", "price": 3.5},
+        {"name": "Fernet Branca", "price": 3.5},
+        {"name": "Jagermeister", "price": 3.5},
+        {"name": "Petrus", "price": 3.5},
+        {"name": "Unicum", "price": 3.5},
+        {"name": "Mirto Bianco", "price": 4.0},
+        {"name": "Mirto Rosso", "price": 4.0},
+        {"name": "Jefferson amaro", "price": 5.0}
+      ]
+    },
+    {
+      "id": "bollicine",
+      "name": "Le Nostre Bollicine",
+      "icon": "🥂",
+      "items": [
+        {"name": "Prosecco", "price": 6.0},
+        {"name": "Villa Sandi Millesimato", "price": 6.0},
+        {"name": "Brachetto d'Acqui", "price": 6.0}
+      ]
+    },
+    {
+      "id": "vini-rossi",
+      "name": "Vini Rossi al Calice",
+      "icon": "🍷",
+      "items": [
+        {"name": "Taurasi 2013 Feudi di San Gregorio", "price": 8.0},
+        {"name": "Aglianico Jungano, San Salvatore", "price": 7.0},
+        {"name": "Aglianico del Re, Feudi di San Gregorio", "price": 6.0},
+        {"name": "Aglianico Sorba Nera, Cantina del Taburno", "price": 6.0},
+        {"name": "Montepulciano d'Abruzzo, Gianni Masciarelli", "price": 6.0},
+        {"name": "Primitivo, San Marzano", "price": 6.0},
+        {"name": "Nero d'Avola, Duca di Salaparuta", "price": 6.0},
+        {"name": "Sangue di Giuda, Giorgi", "price": 6.0},
+        {"name": "Vetere Rosè, San Salvatore", "price": 6.0}
+      ]
+    }
+  ]
+};
+        
+        function generateMenuOverlay() {
+            const container = document.getElementById('menuCategories');
+            
+            const allBtn = document.createElement('button');
+            allBtn.className = 'menu-category-btn';
+            allBtn.innerHTML = '<span class="icon">📋</span> Tutto il Menù';
+            allBtn.onclick = () => showCategory('all');
+            container.appendChild(allBtn);
+            
+            menuData.categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'menu-category-btn';
+                btn.innerHTML = `<span class="icon">${cat.icon || '🍽️'}</span> ${cat.name}`;
+                btn.onclick = () => showCategory(cat.id);
+                container.appendChild(btn);
+            });
+        }
+        
+        function generateMenu() {
+            const container = document.getElementById('menuContainer');
+            
+            menuData.categories.forEach(cat => {
+                const section = document.createElement('section');
+                section.className = 'category';
+                section.id = cat.id;
+                
+                let html = `
+                    <div class="category-header">
+                        <span class="category-icon">${cat.icon || '🍽️'}</span>
+                        <h2 class="category-title">${cat.name}</h2>
+                    </div>
+                `;
+                
+                if (cat.subcategories) {
+                    cat.subcategories.forEach(sub => {
+                        html += `<div class="subcategory">
+                            <h3 class="subcategory-title">${sub.name}</h3>`;
+                        sub.items.forEach(item => {
+                            html += createItemHTML(item);
+                        });
+                        html += '</div>';
+                    });
+                } else if (cat.items) {
+                    cat.items.forEach(item => {
+                        html += createItemHTML(item);
+                    });
+                }
+                
+                section.innerHTML = html;
+                container.appendChild(section);
+            });
+        }
+        
+        function createItemHTML(item) {
+            let priceHTML = '';
+            if (item.price_caldi && item.price_freddi) {
+                priceHTML = `<div class="price-dual">
+                    <span class="price-small">Caldi: €${item.price_caldi.toFixed(2)}</span>
+                    <span class="price-small">Freddi: €${item.price_freddi.toFixed(2)}</span>
+                </div>`;
+            } else if (typeof item.price === 'number') {
+                priceHTML = `<span class="price">€${item.price.toFixed(2)}</span>`;
+            } else {
+                priceHTML = `<span class="price">${item.price}</span>`;
+            }
+            
+            return `
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        ${item.description ? `<div class="item-description">${item.description}</div>` : ''}
+                        ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+                    </div>
+                    <div class="item-price">${priceHTML}</div>
+                </div>
+            `;
+        }
+        
+        function toggleMenu() {
+            const overlay = document.getElementById('menuOverlay');
+            const toggle = document.getElementById('menuToggle');
+            overlay.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+        
+        function showCategory(categoryId) {
+            toggleMenu();
+            
+            if (categoryId === 'all') {
+                document.querySelectorAll('.category').forEach(cat => {
+                    cat.style.display = 'block';
+                });
+                document.getElementById('backToMenu').classList.remove('visible');
+            } else {
+                document.querySelectorAll('.category').forEach(cat => {
+                    if (cat.id === categoryId) {
+                        cat.style.display = 'block';
+                        setTimeout(() => {
+                            cat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 300);
+                    } else {
+                        cat.style.display = 'none';
+                    }
+                });
+                document.getElementById('backToMenu').classList.add('visible');
+            }
+        }
+        
+        function showAllCategories() {
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.style.display = 'block';
+            });
+            document.getElementById('backToMenu').classList.remove('visible');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        document.getElementById('menuOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'menuOverlay') {
+                toggleMenu();
+            }
+        });
+        
+        generateMenuOverlay();
+        generateMenu();
+    </script>
+</body>
+</html>
