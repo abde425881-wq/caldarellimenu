@@ -132,6 +132,116 @@
             box-shadow: 0 0 30px rgba(201, 169, 98, 0.5);
         }
         
+        /* MODALE PRENOTAZIONE */
+        .booking-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 13, 13, 0.98);
+            z-index: 1002;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .booking-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .booking-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 3px solid var(--secondary);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+            animation: scaleIn 0.3s ease;
+            box-shadow: 0 0 40px rgba(201, 169, 98, 0.3);
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .booking-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .booking-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .booking-subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+        
+        .phone-number {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 20px 30px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+        
+        .phone-number:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(201, 169, 98, 0.6);
+        }
+        
+        .booking-note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .close-booking {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close-booking:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            transform: rotate(90deg);
+        }
+        
         .header {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             padding: 20px;
@@ -271,6 +381,17 @@
             transform: translateX(10px);
         }
         
+        .menu-category-btn.booking-btn {
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.2) 0%, rgba(201, 169, 98, 0.1) 100%);
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .menu-category-btn.booking-btn:hover {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+        
         .menu-category-btn .icon { font-size: 1.5rem; }
         
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
@@ -406,6 +527,25 @@
         
         .footer-text { color: #666; font-size: 0.9rem; }
         
+        .booking-footer-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .booking-footer-btn:hover {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+        
         @media (max-width: 600px) {
             .splash-title { font-size: 2.2rem; letter-spacing: 4px; }
             .splash-subtitle { font-size: 1.3rem; }
@@ -416,6 +556,8 @@
             .item-price { text-align: left; margin-left: 0; }
             .menu-category-btn { font-size: 0.9rem; padding: 12px 15px; }
             .menu-title { font-size: 1.5rem; }
+            .booking-content { padding: 30px 20px; }
+            .phone-number { font-size: 1.2rem; padding: 15px 25px; }
         }
         
         ::-webkit-scrollbar { width: 8px; }
@@ -431,6 +573,18 @@
             <div class="splash-subtitle">Dolce & Salato</div>
             <div class="splash-location">Mercato San Severino</div>
             <button class="splash-button" onclick="enterMenu()">Entra nel Menù</button>
+        </div>
+    </div>
+    
+    <!-- MODALE PRENOTAZIONE -->
+    <div class="booking-modal" id="bookingModal">
+        <div class="booking-content">
+            <button class="close-booking" onclick="closeBooking()">✕</button>
+            <div class="booking-icon">📞</div>
+            <h2 class="booking-title">Prenota un Tavolo</h2>
+            <p class="booking-subtitle">Chiamaci per prenotare il tuo tavolo</p>
+            <a href="tel:+39000000000" class="phone-number" id="phoneNumberDisplay">+39 000 000 000</a>
+            <p class="booking-note">Clicca sul numero per chiamare<br>Orari: Tutti i giorni dalle 18:00 alle 02:00</p>
         </div>
     </div>
     
@@ -459,6 +613,7 @@
     
     <footer class="footer">
         <p class="footer-text">CALDARELLI - Mercato San Severino</p>
+        <button class="booking-footer-btn" onclick="openBooking()">📞 Prenota un Tavolo</button>
         <p class="footer-text" style="margin-top: 10px; font-size: 0.8rem;">Menù digitale - Scansiona il QR code</p>
     </footer>
     
@@ -466,6 +621,31 @@
         function enterMenu() {
             document.getElementById('splashScreen').classList.add('hidden');
         }
+        
+        // Configura qui il numero di telefono del bar
+        const PHONE_NUMBER = "+39 081 1234567"; // <-- MODIFICA QUESTO NUMERO
+        const PHONE_LINK = "tel:+390811234567"; // <-- MODIFICA ANCHE QUESTO (solo numeri, no spazi)
+        
+        // Aggiorna il numero nel modale
+        document.getElementById('phoneNumberDisplay').textContent = PHONE_NUMBER;
+        document.getElementById('phoneNumberDisplay').href = PHONE_LINK;
+        
+        function openBooking() {
+            document.getElementById('bookingModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeBooking() {
+            document.getElementById('bookingModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Chiudi modale cliccando fuori
+        document.getElementById('bookingModal').addEventListener('click', (e) => {
+            if (e.target.id === 'bookingModal') {
+                closeBooking();
+            }
+        });
         
         const menuData = {
             "bar_name": "CALDARELLI",
@@ -793,6 +973,16 @@
                 btn.onclick = () => showCategory(cat.id);
                 container.appendChild(btn);
             });
+            
+            // Aggiungi bottone prenotazione nel menu
+            const bookingBtn = document.createElement('button');
+            bookingBtn.className = 'menu-category-btn booking-btn';
+            bookingBtn.innerHTML = '<span class="icon">📞</span> Prenota un Tavolo';
+            bookingBtn.onclick = () => {
+                toggleMenu();
+                setTimeout(openBooking, 300);
+            };
+            container.appendChild(bookingBtn);
         }
         
         function generateMenu() {
