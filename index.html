@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CALDARELLI - Menù Digitale</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400 ;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js "></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js "></script>
     <style>
         :root {
             --primary: #1a1a1a;
@@ -769,50 +769,9 @@
             transform: scale(1.05);
         }
         
+        /* NASCONDE L'INDICATORE SYNCHRONIZZAZIONE TELEGRAM */
         .sync-status {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--secondary);
-            color: var(--secondary);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .sync-status.visible {
-            opacity: 1;
-        }
-        
-        .sync-status.syncing::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            border: 2px solid rgba(201, 169, 98, 0.3);
-            border-top-color: var(--secondary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        .sync-status.online {
-            border-color: #4CAF50;
-            color: #4CAF50;
-        }
-        
-        .sync-status.offline {
-            border-color: #ff9800;
-            color: #ff9800;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            display: none !important;
         }
         
         @media (max-width: 600px) {
@@ -837,7 +796,8 @@
 <body>
     <div class="particles-container" id="particles"></div>
     
-    <div class="sync-status" id="syncStatus">
+    <!-- INDICATORE NASCOSTO -->
+    <div class="sync-status" id="syncStatus" style="display: none;">
         <span>🔄 Connessione...</span>
     </div>
     
@@ -1461,30 +1421,18 @@
             }
         }
         
-        // Inizializzazione Firebase
+        // Inizializzazione Firebase (senza mostrare indicatori visibili)
         function initFirebase() {
-            const syncStatus = document.getElementById('syncStatus');
-            const footerStatus = document.getElementById('footerStatus');
-            
-            syncStatus.classList.add('visible');
-            
-            // Ascolta cambiamenti in tempo reale
+            // Ascolta cambiamenti in tempo reale (nascosto, niente UI)
             db.collection('menu').doc('caldarelli').onSnapshot((doc) => {
                 if (doc.exists && doc.data().categorie) {
                     mergeMenuData(doc.data());
                     generateMenu();
                     generateMenuOverlay();
-                    
-                    syncStatus.innerHTML = '<span>🟢 Sincronizzato Telegram</span>';
-                    syncStatus.classList.remove('offline');
-                    syncStatus.classList.add('online');
-                    footerStatus.textContent = "Aggiornato in tempo reale";
+                    console.log("Menu aggiornato da Telegram");
                 }
             }, (error) => {
                 console.error("Errore Firebase:", error);
-                syncStatus.innerHTML = '<span>🟡 Offline</span>';
-                syncStatus.classList.add('offline');
-                footerStatus.textContent = "Menu locale attivo";
             });
         }
         
