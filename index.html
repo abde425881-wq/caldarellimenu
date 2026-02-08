@@ -799,6 +799,11 @@
             color: #4CAF50;
         }
         
+        .sync-status.offline {
+            border-color: #ff9800;
+            color: #ff9800;
+        }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -876,10 +881,432 @@
     <footer class="footer">
         <p class="footer-text">CALDARELLI - Mercato San Severino</p>
         <button class="booking-footer-btn" onclick="openBooking()">📞 Prenota un Tavolo</button>
-        <p class="footer-text" style="margin-top: 10px; font-size: 0.8rem;" id="footerStatus">Connessione al menu...</p>
+        <p class="footer-text" style="margin-top: 10px; font-size: 0.8rem;" id="footerStatus">Caricamento menu...</p>
     </footer>
     
     <script>
+        // MENU COMPLETO INTEGRATO (Funziona offline)
+        const defaultMenuData = {
+            categories: [
+                {
+                    id: 'caffetteria-classica',
+                    name: 'Caffetteria Classica',
+                    icon: '☕',
+                    items: [
+                        { name: 'Espresso', price: 1.20 },
+                        { name: 'Macchiato', price: 1.30 },
+                        { name: 'Cappuccino', price: 1.50 },
+                        { name: 'Caffè Latte', price: 1.80 },
+                        { name: 'Caffè Americano', price: 2.00 },
+                        { name: 'Caffè Corretto', price: 1.80 },
+                        { name: 'Caffè Lungo', price: 1.30 },
+                        { name: 'Caffè Doppio', price: 2.00 },
+                        { name: 'Caffè Decaffeinato', price: 1.30 },
+                        { name: 'Caffè con Panna', price: 2.50 }
+                    ]
+                },
+                {
+                    id: 'caffetteria-speciale',
+                    name: 'Caffetteria Speciale - Caldi',
+                    icon: '☕',
+                    items: [
+                        { name: 'Crema Caffè', price: 3.00 },
+                        { name: 'Nocciola', price: 4.00 },
+                        { name: 'Cioccolata Calda', price: 4.00 },
+                        { name: 'Cioccolata Bianca', price: 4.00 },
+                        { name: 'Cioccolata Fondente', price: 4.00 },
+                        { name: 'Caffè alla Nocciola', price: 4.50 },
+                        { name: 'Caffè al Pistacchio', price: 4.50 },
+                        { name: 'Caffè al Caramello', price: 4.50 },
+                        { name: 'Caffè alla Vaniglia', price: 4.50 }
+                    ]
+                },
+                {
+                    id: 'bibite',
+                    name: 'Bibite',
+                    icon: '🥤',
+                    items: [
+                        { name: 'Coca-Cola / Coca-Cola Zero', price: 3.50 },
+                        { name: 'Fanta', price: 3.50 },
+                        { name: 'Sprite', price: 3.50 },
+                        { name: 'Acqua Naturale 0.5L', price: 1.00 },
+                        { name: 'Acqua Frizzante 0.5L', price: 1.00 },
+                        { name: 'Thè alla Pesca', price: 3.50 },
+                        { name: 'Thè Limone', price: 3.50 },
+                        { name: 'Thè Zero', price: 3.50 },
+                        { name: 'Chinotto', price: 3.50 },
+                        { name: 'Lemon Soda', price: 3.50 },
+                        { name: 'Red Bull', price: 5.00 },
+                        { name: 'Red Bull Sugarfree', price: 5.00 },
+                        { name: 'Red Bull Tropical', price: 5.00 },
+                        { name: 'Succo di Frutta', price: 3.00 }
+                    ]
+                },
+                {
+                    id: 'birre',
+                    name: 'Birre in Bottiglia',
+                    icon: '🍺',
+                    items: [
+                        { name: 'Peroni', price: 4.00 },
+                        { name: 'Nastro Azzurro', price: 4.00 },
+                        { name: 'Tuborg', price: 4.00 },
+                        { name: 'Beck\'s', price: 4.00 },
+                        { name: 'Corona', price: 4.50 },
+                        { name: 'Heineken', price: 4.00 },
+                        { name: 'Moretti', price: 4.00 },
+                        { name: 'Ichnusa Non Filtrata', price: 4.50 },
+                        { name: 'Tennent\'s', price: 5.00 },
+                        { name: 'Guinness', price: 6.00 }
+                    ]
+                },
+                {
+                    id: 'aperitivi',
+                    name: 'Aperitivi',
+                    icon: '🍹',
+                    items: [
+                        { name: 'Aperol Soda', price: 4.50 },
+                        { name: 'Campari Soda', price: 4.50 },
+                        { name: 'Crodino', price: 3.50 },
+                        { name: 'Cinzano Bianco/Rosso', price: 4.50 },
+                        { name: 'Martini Bianco/Rosso', price: 4.50 },
+                        { name: 'Vermouth', price: 5.00 },
+                        { name: 'Americano', price: 6.00 },
+                        { name: 'Hugo', price: 7.00 }
+                    ]
+                },
+                {
+                    id: 'spritz',
+                    name: 'Le Nostre Proposte Spritz',
+                    icon: '🍹',
+                    items: [
+                        { name: 'Spritz Aperol', price: 6.00 },
+                        { name: 'Spritz Campari', price: 6.00 },
+                        { name: 'Spritz Select', price: 6.50 },
+                        { name: 'Spritz Cynar', price: 6.50 },
+                        { name: 'Spritz al Limone', price: 6.50 },
+                        { name: 'Spritz al Pompelmo', price: 6.50 },
+                        { name: 'Spritz alla Pesca', price: 6.50 },
+                        { name: 'Spritz Royal (Champagne)', price: 10.00 },
+                        { name: 'Spritz Mediterranean', price: 7.00 },
+                        { name: 'Spritz Hugo', price: 7.00 }
+                    ]
+                },
+                {
+                    id: 'grandi-classici',
+                    name: 'I Grandi Classici',
+                    icon: '🥃',
+                    items: [
+                        { name: 'Negroni', price: 7.00 },
+                        { name: 'Americano', price: 7.00 },
+                        { name: 'Old Fashioned', price: 9.00 },
+                        { name: 'Manhattan', price: 9.00 },
+                        { name: 'Dry Martini', price: 8.00 },
+                        { name: 'Margarita', price: 8.00 },
+                        { name: 'Mojito', price: 8.00 },
+                        { name: 'Caipirinha', price: 8.00 },
+                        { name: 'Caipiroska', price: 8.00 },
+                        { name: 'Gin Tonic', price: 8.00 },
+                        { name: 'Vodka Tonic', price: 7.00 },
+                        { name: 'Cuba Libre', price: 7.00 },
+                        { name: 'Screwdriver', price: 7.00 },
+                        { name: 'Cosmopolitan', price: 8.00 },
+                        { name: 'Daiquiri', price: 8.00 }
+                    ]
+                },
+                {
+                    id: 'virgin',
+                    name: 'Proposte Virgin',
+                    icon: '🍸',
+                    items: [
+                        { name: 'Virgin Mojito', price: 6.00 },
+                        { name: 'Virgin Colada', price: 6.50 },
+                        { name: 'Virgin Mary', price: 5.50 },
+                        { name: 'Cocktail alla Frutta', price: 5.00 },
+                        { name: 'Ginger Beer Lemon', price: 5.00 },
+                        { name: 'San Francisco', price: 5.50 }
+                    ]
+                },
+                {
+                    id: 'negroni',
+                    name: 'I Nostri Negroni',
+                    icon: '🥃',
+                    items: [
+                        { name: 'Negroni Classico', price: 7.00 },
+                        { name: 'Negroni Sbagliato', price: 7.50 },
+                        { name: 'Negroni Bianco', price: 8.00 },
+                        { name: 'Negroni al Caffè', price: 8.00 },
+                        { name: 'Negroni al Miele', price: 8.00 },
+                        { name: 'Negroni Mezcal', price: 10.00 },
+                        { name: 'Negroni al Portocale', price: 8.50 }
+                    ]
+                },
+                {
+                    id: 'cognac',
+                    name: 'Cognac e Brandy',
+                    icon: '🥃',
+                    items: [
+                        { name: 'Vecchia Romagna', price: 5.00 },
+                        { name: 'Stock 84', price: 5.50 },
+                        { name: 'Torres 5', price: 6.00 },
+                        { name: 'Torres 10', price: 8.00 },
+                        { name: 'Rémy Martin VSOP', price: 12.00 },
+                        { name: 'Hennessy', price: 10.00 },
+                        { name: 'Martell', price: 10.00 },
+                        { name: 'Courvoisier', price: 9.00 }
+                    ]
+                },
+                {
+                    id: 'rum',
+                    name: 'Rum',
+                    icon: '🥃',
+                    items: [
+                        { name: 'Havana Club 3 anni', price: 6.00 },
+                        { name: 'Havana Club 7 anni', price: 8.00 },
+                        { name: 'Havana Club Selección', price: 9.00 },
+                        { name: 'Bacardi', price: 5.00 },
+                        { name: 'Captain Morgan', price: 5.50 },
+                        { name: 'Malibu', price: 6.00 },
+                        { name: 'Sailor Jerry', price: 6.50 },
+                        { name: 'Zacapa 23', price: 15.00 },
+                        { name: 'Diplomatico', price: 7.00 },
+                        { name: 'Don Papa', price: 8.00 },
+                        { name: 'Pampero', price: 6.00 },
+                        { name: 'Santos', price: 6.50 }
+                    ]
+                },
+                {
+                    id: 'whisky',
+                    name: 'Whisky',
+                    icon: '🥃',
+                    items: [
+                        { name: 'Jack Daniel\'s', price: 5.00 },
+                        { name: 'Jameson', price: 5.00 },
+                        { name: 'Johnnie Walker Red', price: 5.50 },
+                        { name: 'Johnnie Walker Black', price: 8.00 },
+                        { name: 'Ballantine\'s', price: 5.00 },
+                        { name: 'Chivas Regal 12', price: 7.00 },
+                        { name: 'Glenfiddich 12', price: 9.00 },
+                        { name: 'Macallan', price: 10.00 },
+                        { name: 'Laphroaig', price: 10.00 },
+                        { name: 'Bowmore', price: 9.00 },
+                        { name: 'Four Roses', price: 6.00 },
+                        { name: 'Buffalo Trace', price: 7.00 },
+                        { name: 'Jim Beam', price: 5.00 },
+                        { name: 'Maker\'s Mark', price: 7.50 }
+                    ]
+                },
+                {
+                    id: 'grappe',
+                    name: 'Grappe',
+                    icon: '🍇',
+                    items: [
+                        { name: 'Grappa Bianca', price: 5.00 },
+                        { name: 'Grappa Barricata', price: 5.00 },
+                        { name: 'Grappa di Moscato', price: 5.00 },
+                        { name: 'Grappa di Prosecco', price: 5.00 },
+                        { name: 'Grappa Nonino', price: 6.00 },
+                        { name: 'Grappa Sassicaia', price: 8.00 },
+                        { name: 'Grappa Amarone', price: 7.00 },
+                        { name: 'Sambuca', price: 5.00 },
+                        { name: 'Sambuca Molinari', price: 5.50 }
+                    ]
+                },
+                {
+                    id: 'liquori',
+                    name: 'Liquori',
+                    icon: '🥃',
+                    items: [
+                        { name: 'Limoncello', price: 4.00 },
+                        { name: 'Meloncello', price: 4.00 },
+                        { name: 'Fragolino', price: 4.00 },
+                        { name: 'Bayles', price: 6.00 },
+                        { name: 'Kahlùa', price: 5.00 },
+                        { name: 'Cointreau', price: 5.00 },
+                        { name: 'Grand Marnier', price: 6.00 },
+                        { name: 'Disaronno', price: 5.50 },
+                        { name: 'Sheridan\'s', price: 6.00 },
+                        { name: 'Tia Maria', price: 5.00 },
+                        { name: 'Strega', price: 5.00 },
+                        { name: 'Galliano', price: 5.00 }
+                    ]
+                },
+                {
+                    id: 'amari',
+                    name: 'Amari',
+                    icon: '🍷',
+                    items: [
+                        { name: 'Amaro del Capo', price: 4.00 },
+                        { name: 'Averna', price: 4.00 },
+                        { name: 'Montenegro', price: 4.00 },
+                        { name: 'Ramazzotti', price: 4.00 },
+                        { name: 'Fernet Branca', price: 4.50 },
+                        { name: 'Brancamenta', price: 4.50 },
+                        { name: 'Jägermeister', price: 5.00 },
+                        { name: 'Cynar', price: 4.00 },
+                        { name: 'San Simone', price: 4.00 },
+                        { name: 'Underberg', price: 3.50 },
+                        { name: 'China', price: 4.00 },
+                        { name: 'Amaro Lucano', price: 4.50 }
+                    ]
+                },
+                {
+                    id: 'bollicine',
+                    name: 'Le Nostre Bollicine',
+                    icon: '🥂',
+                    items: [
+                        { name: 'Prosecco Brut', price: 5.00 },
+                        { name: 'Prosecco Extra Dry', price: 5.00 },
+                        { name: 'Ferrari Brut', price: 8.00 },
+                        { name: 'Ferrari Perlé', price: 12.00 },
+                        { name: 'Franciacorta', price: 10.00 },
+                        { name: 'Champagne Moët & Chandon', price: 15.00 },
+                        { name: 'Champagne Veuve Clicquot', price: 18.00 },
+                        { name: 'Champagne Dom Pérignon', price: 35.00 },
+                        { name: 'Bellini', price: 7.00 },
+                        { name: 'Rossini', price: 7.00 },
+                        { name: 'Mimosa', price: 7.00 }
+                    ]
+                },
+                {
+                    id: 'vini-rossi',
+                    name: 'Vini al Calice - Rossi',
+                    icon: '🍷',
+                    items: [
+                        { name: 'Aglianico', price: 5.00 },
+                        { name: 'Primitivo', price: 5.50 },
+                        { name: 'Negroamaro', price: 5.00 },
+                        { name: 'Nero d\'Avola', price: 5.00 },
+                        { name: 'Montepulciano', price: 4.50 },
+                        { name: 'Chianti', price: 5.00 },
+                        { name: 'Barbera', price: 5.00 },
+                        { name: 'Valpolicella', price: 5.00 },
+                        { name: 'Amarone', price: 8.00 },
+                        { name: 'Barolo', price: 10.00 }
+                    ]
+                },
+                {
+                    id: 'vini-bianchi',
+                    name: 'Vini al Calice - Bianchi',
+                    icon: '🍷',
+                    items: [
+                        { name: 'Falanghina', price: 5.00 },
+                        { name: 'Greco di Tufo', price: 5.50 },
+                        { name: 'Fiano di Avellino', price: 5.50 },
+                        { name: 'Vermentino', price: 5.00 },
+                        { name: 'Pinot Grigio', price: 4.50 },
+                        { name: 'Soave', price: 4.50 },
+                        { name: 'Chardonnay', price: 5.00 },
+                        { name: 'Sauvignon', price: 5.50 },
+                        { name: 'Moscato', price: 4.50 },
+                        { name: 'Prosecco', price: 4.00 }
+                    ]
+                },
+                {
+                    id: 'stagionali',
+                    name: 'Solo Durante il Periodo',
+                    icon: '🍓',
+                    items: [
+                        { name: 'Fragolino', price: 5.00 },
+                        { name: 'Meloncello', price: 5.00 },
+                        { name: 'Limoncello Artigianale', price: 4.50 },
+                        { name: 'Sangria', price: 6.00 },
+                        { name: 'Caipirinha alla Frutta', price: 8.00 },
+                        { name: 'Mojito alla Frutta', price: 8.50 }
+                    ]
+                },
+                {
+                    id: 'food-taglieri',
+                    name: 'Food - Taglieri',
+                    icon: '🍽️',
+                    items: [
+                        { name: 'Tagliere di Salumi', price: 12.00 },
+                        { name: 'Tagliere di Formaggi', price: 12.00 },
+                        { name: 'Tagliere Misto', price: 15.00 },
+                        { name: 'Tagliere di Mare', price: 18.00 },
+                        { name: 'Bruschette Miste', price: 6.00 },
+                        { name: 'Crostini con Paté', price: 5.00 }
+                    ]
+                },
+                {
+                    id: 'food-patatine',
+                    name: 'Food - Patatine',
+                    icon: '🍟',
+                    items: [
+                        { name: 'Patatine Classiche', price: 4.50 },
+                        { name: 'Patatine con Cheddar', price: 6.00 },
+                        { name: 'Patatine con Bacon', price: 6.50 },
+                        { name: 'Patatine con Porchetta', price: 6.50 },
+                        { name: 'Patatine con Cipolla', price: 5.50 },
+                        { name: 'Patatine Caldarelli (Special)', price: 7.00 }
+                    ]
+                },
+                {
+                    id: 'food-specialita',
+                    name: 'Food - Specialità',
+                    icon: '🍽️',
+                    items: [
+                        { name: 'Fritto Misto', price: 6.00 },
+                        { name: 'Arancini Siciliani', price: 3.50 },
+                        { name: 'Olive Ascolane', price: 5.00 },
+                        { name: 'Mozzarelline Fritte', price: 5.00 },
+                        { name: 'Crocchette di Patate', price: 5.00 },
+                        { name: 'Supplì', price: 3.00 },
+                        { name: 'Panelle', price: 4.00 },
+                        { name: 'Crocchè', price: 3.50 },
+                        { name: 'Focaccia', price: 4.00 },
+                        { name: 'Focaccia con Ripieno', price: 6.00 }
+                    ]
+                },
+                {
+                    id: 'food-pizza',
+                    name: 'Food - Pizza in Pala',
+                    icon: '🍕',
+                    items: [
+                        { name: 'Margherita', price: 6.00 },
+                        { name: 'Marinara', price: 5.50 },
+                        { name: 'Napoli', price: 7.00 },
+                        { name: 'Capricciosa', price: 8.00 },
+                        { name: 'Quattro Formaggi', price: 8.00 },
+                        { name: 'Diavola', price: 7.50 },
+                        { name: 'Prosciutto e Funghi', price: 7.50 },
+                        { name: 'Wurstel e Patatine', price: 7.00 },
+                        { name: 'Porchetta', price: 8.00 },
+                        { name: 'Farcita (a scelta)', price: 8.50 }
+                    ]
+                },
+                {
+                    id: 'food-frutta',
+                    name: 'Food - Frutta',
+                    icon: '🍉',
+                    items: [
+                        { name: 'Coppa di Frutta', price: 5.00 },
+                        { name: 'Ananas', price: 4.00 },
+                        { name: 'Anguria', price: 4.00 },
+                        { name: 'Melone', price: 4.00 },
+                        { name: 'Macedonia', price: 5.50 }
+                    ]
+                },
+                {
+                    id: 'food-panini',
+                    name: 'Food - Panini',
+                    icon: '🥪',
+                    items: [
+                        { name: 'Panino Classico', price: 5.00 },
+                        { name: 'Panino con Porchetta', price: 6.50 },
+                        { name: 'Panino con Salsiccia', price: 6.00 },
+                        { name: 'Kebab', price: 6.50 },
+                        { name: 'Panino Vegetariano', price: 6.00 },
+                        { name: 'Toast', price: 4.50 },
+                        { name: 'Piadina', price: 6.00 },
+                        { name: 'Piadina Completa', price: 7.50 },
+                        { name: 'Panino Caldarelli (Special)', price: 8.00 },
+                        { name: 'Hamburger', price: 8.00 },
+                        { name: 'Cheeseburger', price: 8.50 }
+                    ]
+                }
+            ]
+        };
+
         // Configurazione Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAvsanOMCFqsQP4KC6q8CfPBr8u435hnsQ",
@@ -895,7 +1322,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         
-        let menuData = { categories: [] };
+        let menuData = JSON.parse(JSON.stringify(defaultMenuData)); // Copia profonda
         
         function createParticles() {
             const container = document.getElementById('particles');
@@ -933,59 +1360,78 @@
             if (e.target.id === 'bookingModal') closeBooking();
         });
         
+        // Merge tra menu locale e dati Firebase
+        function mergeMenuData(firebaseData) {
+            if (!firebaseData || !firebaseData.categorie) return;
+            
+            // Per ogni categoria in Firebase
+            for (const [catName, products] of Object.entries(firebaseData.categorie)) {
+                // Trova la categoria nel menu locale
+                const existingCat = menuData.categories.find(c => 
+                    c.name.toLowerCase() === catName.toLowerCase()
+                );
+                
+                if (existingCat) {
+                    // Aggiorna/aggiunge prodotti esistenti
+                    products.forEach(fbProduct => {
+                        const existingItem = existingCat.items.find(i => 
+                            i.name.toLowerCase() === fbProduct.nome.toLowerCase()
+                        );
+                        if (existingItem) {
+                            // Aggiorna prezzo
+                            existingItem.price = fbProduct.prezzo;
+                        } else {
+                            // Aggiunge nuovo prodotto
+                            existingCat.items.push({
+                                name: fbProduct.nome,
+                                price: fbProduct.prezzo
+                            });
+                        }
+                    });
+                } else {
+                    // Crea nuova categoria
+                    menuData.categories.push({
+                        id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                        name: catName,
+                        icon: '🍽️',
+                        items: products.map(p => ({
+                            name: p.nome,
+                            price: p.prezzo
+                        }))
+                    });
+                }
+            }
+        }
+        
         // CARICAMENTO FIREBASE IN TEMPO REALE
         function initMenu() {
             const syncStatus = document.getElementById('syncStatus');
             const footerStatus = document.getElementById('footerStatus');
             
-            // Ascolta cambiamenti in tempo reale
+            // Renderizza subito il menu locale (offline)
+            renderMenu();
+            generateMenuOverlay();
+            footerStatus.textContent = "Menu completo caricato";
+            
+            // Ascolta cambiamenti in tempo reale da Firebase
             db.collection('menu').doc('caldarelli').onSnapshot((doc) => {
                 if (doc.exists && doc.data().categorie) {
-                    const data = doc.data();
-                    convertData(data);
+                    // Merge dati Firebase con menu locale
+                    mergeMenuData(doc.data());
                     renderMenu();
                     generateMenuOverlay();
                     
-                    syncStatus.innerHTML = '<span>🟢 Sincronizzato con Telegram</span>';
+                    syncStatus.innerHTML = '<span>🟢 Aggiornato Telegram</span>';
+                    syncStatus.classList.remove('offline');
                     syncStatus.classList.add('online');
-                    footerStatus.textContent = "Menu aggiornato in tempo reale da Telegram";
-                } else {
-                    footerStatus.textContent = "Menu vuoto - Usa il bot per caricare";
+                    footerStatus.textContent = "Sincronizzato con Telegram";
                 }
             }, (error) => {
-                console.error("Errore:", error);
-                syncStatus.innerHTML = '<span>🔴 Errore connessione</span>';
-                footerStatus.textContent = "Errore di connessione - Ricarica la pagina";
+                console.error("Errore Firebase:", error);
+                syncStatus.innerHTML = '<span>🟡 Offline</span>';
+                syncStatus.classList.add('offline');
+                footerStatus.textContent = "Menu locale attivo (modifiche Telegram non disponibili)";
             });
-        }
-        
-        function convertData(data) {
-            menuData.categories = [];
-            const icons = {
-                'Caffetteria Classica': '☕', 'Caffetteria Speciale - Caldi': '☕',
-                'Bibite': '🥤', 'Birre in Bottiglia': '🍺', 'Aperitivi': '🍹',
-                'Le Nostre Proposte Spritz': '🍹', 'I Grandi Classici': '🥃',
-                'Proposte Virgin': '🍸', 'I Nostri Negroni': '🥃',
-                'Cognac e Brandy': '🥃', 'Rum': '🥃', 'Whisky': '🥃',
-                'Grappe': '🍇', 'Liquori': '🥃', 'Amari': '🍷',
-                'Le Nostre Bollicine': '🥂', 'Vini al Calice - Rossi': '🍷',
-                'Vini al Calice - Bianchi': '🍷', 'Solo Durante il Periodo': '🍓',
-                'Food - Taglieri': '🍽️', 'Food - Patatine': '🍟',
-                'Food - Specialità': '🍽️', 'Food - Pizza in Pala': '🍕',
-                'Food - Frutta': '🍉', 'Food - Panini': '🥪'
-            };
-            
-            for (const [catName, products] of Object.entries(data.categorie)) {
-                menuData.categories.push({
-                    id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                    name: catName,
-                    icon: icons[catName] || '🍽️',
-                    items: products.map(p => ({
-                        name: p.nome,
-                        price: p.prezzo
-                    }))
-                });
-            }
         }
         
         function renderMenu() {
