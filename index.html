@@ -25,6 +25,33 @@
             overflow-x: hidden;
         }
         
+        /* PARTICELLE DORATE FLUTTUANTI */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: var(--secondary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) translateX(50px) scale(1.5); opacity: 0; }
+        }
+        
         .splash-screen {
             position: fixed;
             top: 0;
@@ -38,6 +65,7 @@
             align-items: center;
             z-index: 9999;
             transition: opacity 0.8s ease, visibility 0.8s ease;
+            overflow: hidden;
         }
         
         .splash-screen.hidden {
@@ -49,6 +77,7 @@
         .splash-content {
             text-align: center;
             animation: fadeInUp 1s ease;
+            z-index: 10;
         }
         
         @keyframes fadeInUp {
@@ -79,12 +108,25 @@
             text-transform: uppercase;
             letter-spacing: 8px;
             margin-bottom: 10px;
-            animation: glow 2s ease-in-out infinite alternate;
+            position: relative;
+            background: linear-gradient(45deg, #c9a962, #f4e5c2, #c9a962, #8b7355, #c9a962);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+        }
+        
+        /* EFFETTO SHIMMER ORO */
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         @keyframes glow {
-            from { text-shadow: 0 0 10px var(--secondary), 0 0 20px var(--secondary); }
-            to { text-shadow: 0 0 20px var(--secondary), 0 0 30px var(--secondary), 0 0 40px var(--secondary); }
+            from { text-shadow: 0 0 20px rgba(201, 169, 98, 0.5), 0 0 40px rgba(201, 169, 98, 0.3); }
+            to { text-shadow: 0 0 40px rgba(201, 169, 98, 0.8), 0 0 60px rgba(201, 169, 98, 0.5), 0 0 80px rgba(201, 169, 98, 0.3); }
         }
         
         .splash-subtitle {
@@ -94,6 +136,12 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 15px;
+            animation: slideInLeft 1s ease-out 0.5s both;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         .splash-location {
@@ -102,6 +150,12 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 40px;
+            animation: slideInRight 1s ease-out 0.7s both;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         .splash-button {
@@ -116,7 +170,24 @@
             cursor: pointer;
             border-radius: 50px;
             transition: all 0.3s ease;
-            animation: bounce 2s infinite;
+            animation: bounce 2s infinite, fadeInUp 1s ease-out 1s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .splash-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .splash-button:hover::before {
+            left: 100%;
         }
         
         @keyframes bounce {
@@ -175,6 +246,16 @@
         .booking-icon {
             font-size: 4rem;
             margin-bottom: 20px;
+            animation: ring 2s ease-in-out infinite;
+        }
+        
+        @keyframes ring {
+            0%, 100% { transform: rotate(0deg); }
+            10% { transform: rotate(10deg); }
+            20% { transform: rotate(-10deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-10deg); }
+            50% { transform: rotate(0deg); }
         }
         
         .booking-title {
@@ -204,6 +285,25 @@
             margin-bottom: 20px;
             transition: all 0.3s ease;
             letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phone-number::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
         
         .phone-number:hover {
@@ -255,6 +355,12 @@
             padding: 15px;
             margin: -20px -20px 20px -20px;
             border-bottom: 2px solid #c9a962;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
         }
         
         .redbull-text {
@@ -274,6 +380,12 @@
             margin-top: 10px;
             text-transform: uppercase;
             letter-spacing: 5px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .bar-location {
@@ -301,9 +413,17 @@
             gap: 5px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             transition: all 0.3s ease;
+            animation: fadeInRight 0.5s ease-out 0.5s both;
         }
         
-        .menu-toggle:hover { transform: scale(1.1); }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .menu-toggle:hover { 
+            transform: scale(1.1) rotate(90deg); 
+        }
         
         .menu-toggle span {
             display: block;
@@ -344,6 +464,7 @@
             margin-bottom: 30px;
             text-transform: uppercase;
             letter-spacing: 3px;
+            animation: pulse 2s infinite;
         }
         
         .menu-categories {
@@ -373,12 +494,23 @@
             align-items: center;
             gap: 10px;
             width: 100%;
+            transform: translateX(-100px);
+            opacity: 0;
+            animation: slideInMenu 0.4s ease-out forwards;
+        }
+        
+        @keyframes slideInMenu {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
         
         .menu-category-btn:hover {
             background: var(--secondary);
             color: var(--dark);
-            transform: translateX(10px);
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 5px 20px rgba(201, 169, 98, 0.4);
         }
         
         .menu-category-btn.booking-btn {
@@ -394,16 +526,18 @@
         
         .menu-category-btn .icon { font-size: 1.5rem; }
         
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
         
         .category {
             margin-bottom: 40px;
-            animation: fadeIn 0.5s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .category.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .category-header {
@@ -413,9 +547,35 @@
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid var(--secondary);
+            position: relative;
+            overflow: hidden;
         }
         
-        .category-icon { font-size: 2rem; }
+        .category-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            animation: borderShine 3s infinite;
+        }
+        
+        @keyframes borderShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .category-icon { 
+            font-size: 2rem; 
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
         
         .category-title {
             font-family: 'Playfair Display', serif;
@@ -433,6 +593,12 @@
             font-style: italic;
             padding-left: 10px;
             border-left: 3px solid var(--accent);
+            animation: fadeInLeft 0.5s ease-out;
+        }
+        
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         .menu-item {
@@ -445,12 +611,23 @@
             border-radius: 10px;
             border: 1px solid rgba(201, 169, 98, 0.1);
             transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInItem 0.4s ease-out forwards;
+        }
+        
+        @keyframes slideInItem {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
         .menu-item:hover {
             background: rgba(201, 169, 98, 0.1);
-            transform: translateX(5px);
+            transform: translateX(10px) scale(1.02);
             border-color: var(--secondary);
+            box-shadow: 0 5px 15px rgba(201, 169, 98, 0.2);
         }
         
         .item-info { flex: 1; }
@@ -460,6 +637,11 @@
             font-weight: 600;
             color: var(--light);
             margin-bottom: 5px;
+            transition: color 0.3s;
+        }
+        
+        .menu-item:hover .item-name {
+            color: var(--secondary);
         }
         
         .item-description {
@@ -478,12 +660,20 @@
         .item-price {
             text-align: right;
             margin-left: 15px;
+            position: relative;
         }
         
         .price {
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--secondary);
+            display: inline-block;
+            animation: countUp 0.5s ease-out;
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .price-dual {
@@ -512,10 +702,19 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             z-index: 999;
             transition: all 0.3s ease;
+            animation: pulseButton 2s infinite;
+        }
+        
+        @keyframes pulseButton {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 98, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(201, 169, 98, 0); }
         }
         
         .back-to-menu.visible { display: flex; }
-        .back-to-menu:hover { transform: translateY(-5px); }
+        .back-to-menu:hover { 
+            transform: translateY(-5px) scale(1.1); 
+            animation: none;
+        }
         
         .footer {
             text-align: center;
@@ -523,6 +722,8 @@
             background: rgba(0, 0, 0, 0.5);
             margin-top: 50px;
             border-top: 1px solid rgba(201, 169, 98, 0.3);
+            position: relative;
+            z-index: 2;
         }
         
         .footer-text { color: #666; font-size: 0.9rem; }
@@ -539,11 +740,32 @@
             font-weight: 600;
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .booking-footer-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--secondary);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            z-index: -1;
+        }
+        
+        .booking-footer-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         .booking-footer-btn:hover {
-            background: var(--secondary);
             color: var(--dark);
+            transform: scale(1.05);
         }
         
         @media (max-width: 600px) {
@@ -566,6 +788,9 @@
     </style>
 </head>
 <body>
+    <!-- PARTICELLE FLUTTUANTI -->
+    <div class="particles-container" id="particles"></div>
+    
     <div class="splash-screen" id="splashScreen">
         <div class="splash-content">
             <div class="splash-welcome">Benvenuto al</div>
@@ -618,8 +843,29 @@
     </footer>
     
     <script>
+        // GENERA PARTICELLE DORATE
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 10 + 5;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
         function enterMenu() {
             document.getElementById('splashScreen').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('particles').style.opacity = '0.5';
+            }, 800);
         }
         
         // Numero di telefono aggiornato del bar
@@ -1107,21 +1353,23 @@
             
             const allBtn = document.createElement('button');
             allBtn.className = 'menu-category-btn';
+            allBtn.style.animationDelay = '0.1s';
             allBtn.innerHTML = '<span class="icon">📋</span> Tutto il Menù';
             allBtn.onclick = () => showCategory('all');
             container.appendChild(allBtn);
             
-            menuData.categories.forEach(cat => {
+            menuData.categories.forEach((cat, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'menu-category-btn';
+                btn.style.animationDelay = (index * 0.05 + 0.1) + 's';
                 btn.innerHTML = `<span class="icon">${cat.icon || '🍽️'}</span> ${cat.name}`;
                 btn.onclick = () => showCategory(cat.id);
                 container.appendChild(btn);
             });
             
-            // Aggiungi bottone prenotazione nel menu
             const bookingBtn = document.createElement('button');
             bookingBtn.className = 'menu-category-btn booking-btn';
+            bookingBtn.style.animationDelay = (menuData.categories.length * 0.05 + 0.1) + 's';
             bookingBtn.innerHTML = '<span class="icon">📞</span> Prenota un Tavolo';
             bookingBtn.onclick = () => {
                 toggleMenu();
@@ -1134,7 +1382,7 @@
             const container = document.getElementById('menuContainer');
             container.innerHTML = '';
             
-            menuData.categories.forEach(cat => {
+            menuData.categories.forEach((cat, catIndex) => {
                 const section = document.createElement('section');
                 section.className = 'category';
                 section.id = cat.id;
@@ -1146,27 +1394,33 @@
                     </div>
                 `;
                 
+                let itemIndex = 0;
                 if (cat.subcategories) {
                     cat.subcategories.forEach(sub => {
                         html += `<div class="subcategory">
                             <h3 class="subcategory-title">${sub.name}</h3>`;
-                        sub.items.forEach(item => {
-                            html += createItemHTML(item);
+                        sub.items.forEach((item, idx) => {
+                            html += createItemHTML(item, itemIndex++);
                         });
                         html += '</div>';
                     });
                 } else if (cat.items) {
-                    cat.items.forEach(item => {
-                        html += createItemHTML(item);
+                    cat.items.forEach((item, idx) => {
+                        html += createItemHTML(item, itemIndex++);
                     });
                 }
                 
                 section.innerHTML = html;
                 container.appendChild(section);
+                
+                // Animazione apparizione categoria allo scroll
+                setTimeout(() => {
+                    section.classList.add('visible');
+                }, catIndex * 100);
             });
         }
         
-        function createItemHTML(item) {
+        function createItemHTML(item, index) {
             let priceHTML = '';
             if (item.price_caldi && item.price_freddi) {
                 priceHTML = `<div class="price-dual">
@@ -1180,7 +1434,7 @@
             }
             
             return `
-                <div class="menu-item">
+                <div class="menu-item" style="animation-delay: ${index * 0.05}s">
                     <div class="item-info">
                         <div class="item-name">${item.name}</div>
                         ${item.description ? `<div class="item-description">${item.description}</div>` : ''}
@@ -1196,6 +1450,18 @@
             const toggle = document.getElementById('menuToggle');
             overlay.classList.toggle('active');
             toggle.classList.toggle('active');
+            
+            // Rianima i bottoni quando si apre il menu
+            if (overlay.classList.contains('active')) {
+                const buttons = document.querySelectorAll('.menu-category-btn');
+                buttons.forEach((btn, index) => {
+                    btn.style.animation = 'none';
+                    setTimeout(() => {
+                        btn.style.animation = `slideInMenu 0.4s ease-out forwards`;
+                        btn.style.animationDelay = (index * 0.05) + 's';
+                    }, 10);
+                });
+            }
         }
         
         function showCategory(categoryId) {
@@ -1204,17 +1470,21 @@
             if (categoryId === 'all') {
                 document.querySelectorAll('.category').forEach(cat => {
                     cat.style.display = 'block';
+                    cat.classList.add('visible');
                 });
                 document.getElementById('backToMenu').classList.remove('visible');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 document.querySelectorAll('.category').forEach(cat => {
                     if (cat.id === categoryId) {
                         cat.style.display = 'block';
                         setTimeout(() => {
+                            cat.classList.add('visible');
                             cat.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 300);
+                        }, 100);
                     } else {
                         cat.style.display = 'none';
+                        cat.classList.remove('visible');
                     }
                 });
                 document.getElementById('backToMenu').classList.add('visible');
@@ -1222,8 +1492,11 @@
         }
         
         function showAllCategories() {
-            document.querySelectorAll('.category').forEach(cat => {
+            document.querySelectorAll('.category').forEach((cat, index) => {
                 cat.style.display = 'block';
+                setTimeout(() => {
+                    cat.classList.add('visible');
+                }, index * 100);
             });
             document.getElementById('backToMenu').classList.remove('visible');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1235,6 +1508,8 @@
             }
         });
         
+        // Inizializza
+        createParticles();
         generateMenuOverlay();
         generateMenu();
     </script>
