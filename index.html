@@ -892,6 +892,22 @@
     </footer>
     
     <script>
+        // LISTA CATEGORIE DA ESCLUDERE (duplicate o errate)
+        const EXCLUDED_CATEGORIES = [
+            'FOOD - TAGLIERI',
+            'FOOD - PATATINE', 
+            'FOOD - FRUTTA',
+            'FOOD - PANINI',
+            'FOOD - SPECIALITÀ',
+            'FOOD - SPECIALITA',
+            'VINI AL CALICE - BIANCHI',
+            'VINI AL CALICE - VINI BIANCHI',
+            'MONSTER',
+            '/START',
+            'START',
+            'FOOD - PIZZA IN PALA'
+        ];
+
         // MENU COMPLETO LOCALE (Funziona offline)
         let menuData = {
             "bar_name": "CALDARELLI",
@@ -1379,11 +1395,23 @@
             if (e.target.id === 'bookingModal') closeBooking();
         });
         
+        // Funzione per filtrare categorie duplicate
+        function isValidCategory(catName) {
+            const upperName = catName.toUpperCase().trim();
+            return !EXCLUDED_CATEGORIES.includes(upperName);
+        }
+        
         // Merge menu locale con dati Firebase
         function mergeMenuData(firebaseData) {
             if (!firebaseData || !firebaseData.categorie) return;
             
             for (const [catName, products] of Object.entries(firebaseData.categorie)) {
+                // Salta categorie duplicate o errate
+                if (!isValidCategory(catName)) {
+                    console.log('Categoria esclusa:', catName);
+                    continue;
+                }
+                
                 // Cerca categoria esistente (case insensitive)
                 const existingCat = menuData.categories.find(c => 
                     c.name.toLowerCase() === catName.toLowerCase()
@@ -1417,7 +1445,7 @@
                         }
                     });
                 } else {
-                    // Nuova categoria
+                    // Nuova categoria valida
                     menuData.categories.push({
                         id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
                         name: catName,
