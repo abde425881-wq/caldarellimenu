@@ -18,11 +18,10 @@
             --border: rgba(201, 169, 98, 0.1);
         }
         
-        /* LIGHT MODE VARIABLES */
         [data-theme="light"] {
             --bg: #f5f5f5;
             --text: #1a1a1a;
-            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
             --border: rgba(201, 169, 98, 0.3);
             --dark: #ffffff;
             --light: #1a1a1a;
@@ -38,6 +37,107 @@
             min-height: 100vh;
             overflow-x: hidden;
             transition: background 0.5s ease, color 0.5s ease;
+        }
+        
+        /* SPLASH SCREEN */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #2d2d2d 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        
+        .splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .splash-content {
+            text-align: center;
+            animation: fadeInUp 1s ease;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .splash-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #c9a962, #f4e5c2, #c9a962);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .splash-welcome {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .splash-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .splash-location {
+            font-size: 1.2rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+        }
+        
+        .splash-button {
+            background: transparent;
+            border: 3px solid var(--secondary);
+            color: var(--secondary);
+            padding: 20px 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .splash-button:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(201, 169, 98, 0.5);
         }
         
         /* THEME TOGGLE */
@@ -58,12 +158,11 @@
             font-size: 1.5rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
-            animation: fadeInLeft 0.5s ease-out;
         }
         
         .theme-toggle:hover { transform: scale(1.1) rotate(15deg); }
         
-        /* OPEN/CLOSED BADGE */
+        /* STATUS BADGE */
         .status-badge {
             position: fixed;
             top: 20px;
@@ -80,7 +179,6 @@
             align-items: center;
             gap: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            animation: fadeInDown 0.5s ease-out;
         }
         
         .status-badge.open {
@@ -103,20 +201,38 @@
             animation: blink 2s infinite;
         }
         
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); } }
+        
+        /* FAVORITES BUTTON */
+        .favorites-btn {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            z-index: 1001;
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .favorites-btn:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            transform: scale(1.05);
         }
         
         /* SEARCH BAR */
         .search-container {
             position: sticky;
-            top: 70px;
+            top: 80px;
             z-index: 998;
             max-width: 600px;
             margin: 20px auto;
@@ -142,18 +258,259 @@
             transform: scale(1.02);
         }
         
-        .search-bar::placeholder {
-            color: var(--text);
-            opacity: 0.5;
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary);
+            margin-top: 60px;
         }
         
-        .search-icon {
-            position: absolute;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
+        [data-theme="light"] .header {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .bar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
             color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+        
+        .bar-location {
+            font-size: 1rem;
+            color: #888;
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+        
+        /* MENU TOGGLE */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: var(--secondary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle:hover { transform: scale(1.1); }
+        
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--dark);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+        
+        /* MENU OVERLAY */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 13, 13, 0.98);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .menu-overlay.active { opacity: 1; visibility: visible; }
+        
+        .menu-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .menu-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .menu-category-btn {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .menu-category-btn:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            transform: translateX(10px);
+        }
+        
+        /* CONTAINER */
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            display: none; /* Nascosto all'inizio */
+        }
+        
+        .container.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* CATEGORY */
+        .category {
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .category-icon { font-size: 2rem; }
+        
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+        
+        .subcategory { margin: 20px 0; }
+        
+        .subcategory-title {
             font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 15px;
+            font-style: italic;
+            padding-left: 10px;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .menu-item:hover {
+            background: rgba(201, 169, 98, 0.1);
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+        
+        .favorite-icon {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            opacity: 0;
+            transition: all 0.3s;
+            color: var(--accent);
+        }
+        
+        .menu-item:hover .favorite-icon {
+            opacity: 1;
+        }
+        
+        .favorite-icon.active {
+            opacity: 1;
+            animation: heartBeat 0.3s;
+        }
+        
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .item-info { flex: 1; padding-right: 40px; }
+        
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+        
+        .item-description {
+            font-size: 0.85rem;
+            color: #888;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        
+        .item-price {
+            text-align: right;
+            white-space: nowrap;
+        }
+        
+        .price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary);
         }
         
         .no-results {
@@ -165,157 +522,321 @@
             display: none;
         }
         
-        /* 3D TILT EFFECT */
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: var(--card-bg);
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateX(-20px);
-            animation: slideInItem 0.4s ease-out forwards;
+        /* BACK TO MENU */
+        .back-to-menu {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--secondary);
+            color: var(--dark);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
             cursor: pointer;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-        
-        .menu-item:hover {
-            background: rgba(201, 169, 98, 0.1);
-            border-color: var(--secondary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        /* SWIPE INDICATOR */
-        .swipe-indicator {
+            font-size: 2rem;
             display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-menu.visible { display: flex; }
+        .back-to-menu:hover { transform: translateY(-5px); }
+        
+        /* FOOTER */
+        .footer {
             text-align: center;
-            padding: 10px;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            margin-top: 50px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .booking-footer-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid var(--secondary);
             color: var(--secondary);
-            font-size: 0.8rem;
-            opacity: 0.6;
-            animation: fadeInOut 2s infinite;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
         
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
+        .booking-footer-btn:hover {
+            background: var(--secondary);
+            color: var(--dark);
         }
         
-        @media (max-width: 768px) {
-            .swipe-indicator {
-                display: block;
-            }
-            .theme-toggle {
-                top: 80px;
-                left: 10px;
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
-            .status-badge {
-                top: 10px;
-                font-size: 0.8rem;
-                padding: 6px 15px;
-            }
-        }
-        
-        /* ... (tutto il resto del CSS precedente rimane uguale, solo aggiornato con le variabili CSS) ... */
-        
-        .splash-screen {
+        /* BOOKING MODAL */
+        .booking-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--bg);
-            display: flex;
-            flex-direction: column;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         
-        .splash-title {
-            background: linear-gradient(45deg, var(--secondary), #f4e5c2, var(--secondary), #8b7355, var(--secondary));
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .booking-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .booking-content {
+            background: var(--card-bg);
+            border: 3px solid var(--secondary);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+        }
+        
+        .close-booking {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .phone-number {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .splash-title { font-size: 2rem; }
+            .favorites-btn { right: 70px; font-size: 0.9rem; padding: 8px 15px; }
+            .search-container { top: 70px; }
         }
     </style>
 </head>
 <body>
-    <!-- THEME TOGGLE -->
+    <!-- SPLASH SCREEN -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-welcome">Benvenuto al</div>
+            <div class="splash-title">Caldarelli</div>
+            <div class="splash-subtitle">Dolce & Salato</div>
+            <div class="splash-location">Mercato San Severino</div>
+            <button class="splash-button" onclick="enterMenu()">Entra nel Menù</button>
+        </div>
+    </div>
+    
+    <!-- CONTROLLI SUPERIORI -->
     <button class="theme-toggle" onclick="toggleTheme()" title="Cambia tema">🌓</button>
     
-    <!-- STATUS BADGE -->
-    <div class="status-badge" id="statusBadge">
-        <span id="statusText">Controllo orari...</span>
+    <div class="status-badge open" id="statusBadge">
+        <span>APERTO ORA</span>
     </div>
     
-    <!-- SEARCH BAR (visibile dopo lo splash) -->
-    <div class="search-container" id="searchContainer" style="display: none;">
-        <input type="text" class="search-bar" id="searchBar" placeholder="Cerca un drink o piatto..." oninput="filterMenu()">
-        <span class="search-icon">🔍</span>
+    <button class="favorites-btn" onclick="showFavorites()">
+        <span>❤️</span>
+        <span>Preferiti</span>
+    </button>
+    
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
+    <!-- MENU OVERLAY -->
+    <div class="menu-overlay" id="menuOverlay">
+        <h2 class="menu-title">Categorie</h2>
+        <div class="menu-categories" id="menuCategories"></div>
     </div>
     
-    <div class="no-results" id="noResults">
-        Nessun prodotto trovato 😔
+    <!-- CONTENUTO PRINCIPALE -->
+    <div class="main-content" id="mainContent" style="display: none;">
+        <div class="header">
+            <h1 class="bar-title">CALDARELLI</h1>
+            <p class="bar-location">MERCATO SAN SEVERINO</p>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Cerca un drink o piatto..." oninput="filterMenu()">
+        </div>
+        
+        <div class="no-results" id="noResults">
+            Nessun prodotto trovato 😔
+        </div>
+        
+        <main class="container" id="menuContainer"></main>
+        
+        <footer class="footer">
+            <p style="color: #666; font-size: 0.9rem;">CALDARELLI - Mercato San Severino</p>
+            <button class="booking-footer-btn" onclick="openBooking()">📞 Prenota un Tavolo</button>
+        </footer>
     </div>
     
-    <!-- ... (resto del body precedente) ... -->
+    <button class="back-to-menu" id="backToMenu" onclick="showAllCategories()">☰</button>
+    
+    <!-- MODALE PRENOTAZIONE -->
+    <div class="booking-modal" id="bookingModal">
+        <div class="booking-content">
+            <button class="close-booking" onclick="closeBooking()">✕</button>
+            <h2 style="font-family: 'Playfair Display', serif; color: var(--secondary); margin-bottom: 10px;">Prenota un Tavolo</h2>
+            <p style="color: #888; margin-bottom: 20px;">Chiamaci per prenotare</p>
+            <a href="tel:+39089879067" class="phone-number">089 87 90 67</a>
+            <p style="color: #666; font-size: 0.9rem; margin-top: 15px;">Orari: 18:00 - 02:00</p>
+        </div>
+    </div>
     
     <script>
-        // THEME TOGGLE
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        }
-        
-        // Load saved theme
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        
-        // CHECK IF OPEN
-        function checkOpenStatus() {
-            const now = new Date();
-            const hour = now.getHours();
-            const badge = document.getElementById('statusBadge');
-            const text = document.getElementById('statusText');
-            
-            // Orari: 18:00 - 02:00
-            const isOpen = (hour >= 18 || hour < 2);
-            
-            if (isOpen) {
-                badge.className = 'status-badge open';
-                text.textContent = 'Aperto ora';
-            } else {
-                badge.className = 'status-badge closed';
-                text.textContent = 'Chiuso - Apriamo alle 18:00';
+        // DATI DEL MENU
+        const menuData = [
+            {
+                id: "caffetteria",
+                name: "Caffetteria",
+                icon: "☕",
+                items: [
+                    {name: "Caffè Espresso", price: 1.50},
+                    {name: "Cappuccino", price: 2.00},
+                    {name: "Caffè Macchiato", price: 1.80}
+                ]
+            },
+            {
+                id: "cocktails",
+                name: "Cocktails",
+                icon: "🍹",
+                items: [
+                    {name: "Spritz Aperol", price: 7.00, description: "Aperol, Prosecco, Soda"},
+                    {name: "Mojito", price: 7.00, description: "Rum, Menta, Lime, Zucchero"},
+                    {name: "Negroni", price: 7.00, description: "Gin, Campari, Vermouth"}
+                ]
+            },
+            {
+                id: "food",
+                name: "Food",
+                icon: "🍽️",
+                items: [
+                    {name: "Tagliere Salumi e Formaggi", price: 10.00, description: "Selezione per 2 persone"},
+                    {name: "Patatine Fritte", price: 5.00},
+                    {name: "Panino Caldarelli", price: 7.00, description: "Hamburger, Provola, Bacon"}
+                ]
             }
+        ];
+        
+        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        let showingFavorites = false;
+        
+        // ENTRA NEL MENU
+        function enterMenu() {
+            document.getElementById('splashScreen').classList.add('hidden');
+            document.getElementById('mainContent').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('menuContainer').classList.add('visible');
+            }, 100);
+            generateMenu();
+            generateMenuOverlay();
+            checkStatus();
         }
         
-        // SEARCH FILTER
+        // GENERA MENU
+        function generateMenu(itemsToShow = null) {
+            const container = document.getElementById('menuContainer');
+            container.innerHTML = '';
+            
+            const data = itemsToShow || menuData;
+            
+            data.forEach((cat, catIndex) => {
+                if (!cat.items || cat.items.length === 0) return;
+                
+                const section = document.createElement('section');
+                section.className = 'category';
+                section.id = cat.id;
+                
+                let html = `
+                    <div class="category-header">
+                        <span class="category-icon">${cat.icon}</span>
+                        <h2 class="category-title">${cat.name}</h2>
+                    </div>
+                `;
+                
+                cat.items.forEach((item, idx) => {
+                    const isFav = favorites.includes(item.name);
+                    html += `
+                        <div class="menu-item" data-name="${item.name.toLowerCase()}">
+                            <div class="item-info">
+                                <div class="item-name">${item.name}</div>
+                                ${item.description ? `<div class="item-description">${item.description}</div>` : ''}
+                            </div>
+                            <div class="item-price">
+                                <span class="price">€${item.price.toFixed(2)}</span>
+                            </div>
+                            <span class="favorite-icon ${isFav ? 'active' : ''}" onclick="toggleFavorite('${item.name}', this)">
+                                ${isFav ? '❤️' : '🤍'}
+                            </span>
+                        </div>
+                    `;
+                });
+                
+                section.innerHTML = html;
+                container.appendChild(section);
+            });
+        }
+        
+        // GENERA OVERLAY CATEGORIE
+        function generateMenuOverlay() {
+            const container = document.getElementById('menuCategories');
+            container.innerHTML = '';
+            
+            const allBtn = document.createElement('button');
+            allBtn.className = 'menu-category-btn';
+            allBtn.innerHTML = '📋 Tutto il Menù';
+            allBtn.onclick = () => { showAllCategories(); toggleMenu(); };
+            container.appendChild(allBtn);
+            
+            menuData.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'menu-category-btn';
+                btn.innerHTML = `${cat.icon} ${cat.name}`;
+                btn.onclick = () => { showCategory(cat.id); toggleMenu(); };
+                container.appendChild(btn);
+            });
+        }
+        
+        // FILTRA MENU
         function filterMenu() {
             const searchTerm = document.getElementById('searchBar').value.toLowerCase();
             const items = document.querySelectorAll('.menu-item');
-            const categories = document.querySelectorAll('.category');
             let hasResults = false;
             
             items.forEach(item => {
-                const name = item.querySelector('.item-name').textContent.toLowerCase();
-                const desc = item.querySelector('.item-description')?.textContent.toLowerCase() || '';
-                
-                if (name.includes(searchTerm) || desc.includes(searchTerm)) {
+                const name = item.getAttribute('data-name');
+                if (name.includes(searchTerm)) {
                     item.style.display = 'flex';
                     hasResults = true;
                 } else {
@@ -323,80 +844,105 @@
                 }
             });
             
-            // Mostra/nascondi categorie in base ai risultati
-            categories.forEach(cat => {
-                const visibleItems = cat.querySelectorAll('.menu-item[style*="flex"]');
-                cat.style.display = visibleItems.length > 0 ? 'block' : 'none';
-            });
-            
             document.getElementById('noResults').style.display = hasResults ? 'none' : 'block';
         }
         
-        // SWIPE GESTURES
-        let touchStartX = 0;
-        let touchEndX = 0;
-        const minSwipeDistance = 50;
-        
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        
-        document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            const swipeDistance = touchEndX - touchStartX;
-            const categories = Array.from(document.querySelectorAll('.category'));
-            const currentVisible = categories.find(cat => cat.style.display !== 'none');
-            
-            if (Math.abs(swipeDistance) < minSwipeDistance) return;
-            
-            if (swipeDistance > 0) {
-                // Swipe right - previous
-                console.log('Swipe right - previous category');
+        // PREFERITI
+        function toggleFavorite(name, element) {
+            element.classList.toggle('active');
+            if (favorites.includes(name)) {
+                favorites = favorites.filter(f => f !== name);
+                element.innerHTML = '🤍';
             } else {
-                // Swipe left - next
-                console.log('Swipe left - next category');
+                favorites.push(name);
+                element.innerHTML = '❤️';
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+        
+        function showFavorites() {
+            showingFavorites = !showingFavorites;
+            const container = document.getElementById('menuContainer');
+            
+            if (showingFavorites) {
+                // Filtra solo preferiti
+                const favData = menuData.map(cat => ({
+                    ...cat,
+                    items: cat.items.filter(item => favorites.includes(item.name))
+                })).filter(cat => cat.items.length > 0);
+                
+                if (favData.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 40px; color: #888;">Nessun preferito salvato ❤️</div>';
+                } else {
+                    generateMenu(favData);
+                }
+                document.querySelector('.favorites-btn').style.background = 'var(--secondary)';
+                document.querySelector('.favorites-btn').style.color = 'var(--dark)';
+            } else {
+                generateMenu();
+                document.querySelector('.favorites-btn').style.background = 'transparent';
+                document.querySelector('.favorites-btn').style.color = 'var(--secondary)';
             }
         }
         
-        // 3D TILT EFFECT
-        document.addEventListener('mousemove', (e) => {
-            const cards = document.querySelectorAll('.menu-item');
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
-                    
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-                } else {
-                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-                }
-            });
-        });
-        
-        // Initialize
-        checkOpenStatus();
-        setInterval(checkOpenStatus, 60000); // Aggiorna ogni minuto
-        
-        // Mostra search bar dopo lo splash
-        function enterMenu() {
-            document.getElementById('splashScreen').classList.add('hidden');
-            setTimeout(() => {
-                document.getElementById('particles').style.opacity = '0.5';
-                document.getElementById('searchContainer').style.display = 'block';
-            }, 800);
+        // NAVIGAZIONE
+        function toggleMenu() {
+            document.getElementById('menuOverlay').classList.toggle('active');
+            document.getElementById('menuToggle').classList.toggle('active');
         }
         
-        // ... (resto degli script precedenti) ...
+        function showCategory(id) {
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.style.display = cat.id === id ? 'block' : 'none';
+            });
+            document.getElementById('backToMenu').classList.add('visible');
+        }
+        
+        function showAllCategories() {
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.style.display = 'block';
+            });
+            document.getElementById('backToMenu').classList.remove('visible');
+            document.getElementById('searchBar').value = '';
+            filterMenu();
+        }
+        
+        // TEMA
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+        
+        // ORARI
+        function checkStatus() {
+            const hour = new Date().getHours();
+            const isOpen = (hour >= 18 || hour < 2);
+            const badge = document.getElementById('statusBadge');
+            
+            if (isOpen) {
+                badge.className = 'status-badge open';
+                badge.innerHTML = '<span>APERTO ORA</span>';
+            } else {
+                badge.className = 'status-badge closed';
+                badge.innerHTML = '<span>CHIUSO</span>';
+            }
+        }
+        
+        // PRENOTAZIONE
+        function openBooking() {
+            document.getElementById('bookingModal').classList.add('active');
+        }
+        
+        function closeBooking() {
+            document.getElementById('bookingModal').classList.remove('active');
+        }
+        
+        // Inizializza tema
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 </body>
 </html>
