@@ -74,10 +74,46 @@
             pointer-events: none;
         }
         
+        /* IMMAGINI LATERALI PICCOLE */
+        .splash-decoration {
+            position: absolute;
+            width: 100px;
+            height: auto;
+            opacity: 0.6;
+            z-index: 5;
+            pointer-events: none;
+            filter: sepia(100%) brightness(0.8) contrast(1.2) hue-rotate(10deg);
+            animation: floatImage 8s ease-in-out infinite;
+        }
+        
+        .splash-decoration.coffee {
+            top: 15%;
+            left: 5%;
+            transform: rotate(-12deg);
+            animation-delay: 0s;
+        }
+        
+        .splash-decoration.wine {
+            bottom: 15%;
+            right: 5%;
+            transform: rotate(12deg);
+            animation-delay: 4s;
+            width: 110px;
+        }
+        
+        @keyframes floatImage {
+            0%, 100% { transform: translateY(0) rotate(var(--rotation, 0deg)); }
+            50% { transform: translateY(-15px) rotate(var(--rotation, 0deg)); }
+        }
+        
+        .splash-decoration.coffee { --rotation: -12deg; }
+        .splash-decoration.wine { --rotation: 12deg; }
+        
         .splash-content {
             text-align: center;
             animation: fadeInUp 1s ease;
             z-index: 10;
+            position: relative;
         }
         
         @keyframes fadeInUp {
@@ -173,6 +209,7 @@
             animation: bounce 2s infinite, fadeInUp 1s ease-out 1s both;
             position: relative;
             overflow: hidden;
+            z-index: 20;
         }
         
         .splash-button::before {
@@ -201,6 +238,22 @@
             color: var(--dark);
             transform: scale(1.05);
             box-shadow: 0 0 30px rgba(201, 169, 98, 0.5);
+        }
+        
+        /* RESPONSIVE per mobile */
+        @media (max-width: 768px) {
+            .splash-decoration {
+                width: 70px;
+                opacity: 0.4;
+            }
+            .splash-decoration.coffee {
+                top: 10%;
+                left: 2%;
+            }
+            .splash-decoration.wine {
+                bottom: 10%;
+                right: 2%;
+            }
         }
         
         /* MODALE PRENOTAZIONE */
@@ -792,6 +845,10 @@
     <div class="particles-container" id="particles"></div>
     
     <div class="splash-screen" id="splashScreen">
+        <!-- IMMAGINI DECORATIVE PICCOLE -->
+        <img src="coffee-hand.png" alt="Caffè" class="splash-decoration coffee">
+        <img src="wine-hand.png" alt="Vino" class="splash-decoration wine">
+        
         <div class="splash-content">
             <div class="splash-welcome">Benvenuto al</div>
             <div class="splash-title">Caldarelli</div>
