@@ -849,11 +849,10 @@
     </footer>
     
     <script>
-        // TUTTE LE CATEGORIE ESCLUSE RIMOSSE!
-        // Ora il bot può aggiungere prodotti a qualsiasi categoria: Food, Vini, etc.
+        // CATEGORIE ESCLUSE - MONSTER e START RIMOSSI
         const EXCLUDED_CATEGORIES = [
-            // Lista vuota - nessuna categoria esclusa
-            // Puoi aggiungere qui solo se vuoi bloccare qualcosa di specifico
+            "MONSTER",
+            "START"
         ];
 
         // MENU COMPLETO LOCALE
@@ -1388,12 +1387,25 @@
             if (e.target.id === 'bookingModal') closeBooking();
         });
         
-        // Funzione per filtrare categorie - ORA ACCETTA TUTTO
+        // Funzione per filtrare categorie - ORA ESCLUDE MONSTER E START
         function isValidCategory(catName) {
-            // Lista vuota - accetta tutte le categorie dal bot
-            const excluded = [];
             const upperName = catName.toUpperCase().trim();
-            return !excluded.includes(upperName);
+            
+            // Controlla se è una categoria esclusa
+            if (EXCLUDED_CATEGORIES.includes(upperName)) {
+                console.log(`Categoria esclusa: ${catName}`);
+                return false;
+            }
+            
+            // Controlla anche per sottocategorie (es. "Caffetteria - Start")
+            for (let excluded of EXCLUDED_CATEGORIES) {
+                if (upperName.includes(excluded)) {
+                    console.log(`Categoria esclusa (match parziale): ${catName}`);
+                    return false;
+                }
+            }
+            
+            return true;
         }
         
         // Merge menu locale con dati Firebase
@@ -1407,6 +1419,11 @@
             let hasUpdates = false;
             
             for (const [catName, products] of Object.entries(firebaseData.categorie)) {
+                // SALTA LE CATEGORIE ESCLUSE
+                if (!isValidCategory(catName)) {
+                    continue;
+                }
+                
                 // Gestione speciale per categorie con trattino (es. "Caffetteria Speciale - Caldi")
                 let targetCatName = catName;
                 let targetSubcatName = null;
@@ -1498,19 +1515,21 @@
                         });
                     }
                 } else {
-                    // Crea nuova categoria se non esiste
-                    console.log('Creazione nuova categoria:', catName);
-                    const newCategory = {
-                        id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                        name: catName,
-                        icon: '🍽️',
-                        items: products.map(p => ({
-                            name: p.nome,
-                            price: p.prezzo
-                        }))
-                    };
-                    menuData.categories.push(newCategory);
-                    hasUpdates = true;
+                    // Crea nuova categoria se non esiste (solo se non è esclusa)
+                    if (isValidCategory(catName)) {
+                        console.log('Creazione nuova categoria:', catName);
+                        const newCategory = {
+                            id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                            name: catName,
+                            icon: '🍽️',
+                            items: products.map(p => ({
+                                name: p.nome,
+                                price: p.prezzo
+                            }))
+                        };
+                        menuData.categories.push(newCategory);
+                        hasUpdates = true;
+                    }
                 }
             }
             
