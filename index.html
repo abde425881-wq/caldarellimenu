@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CALDARELLI - Menù Digitale</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400  ;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js  "></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js  "></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
         :root {
             --primary: #1a1a1a;
@@ -769,7 +769,6 @@
             transform: scale(1.05);
         }
         
-        /* NASCONDE L'INDICATORE SYNCHRONIZZAZIONE TELEGRAM */
         .sync-status {
             display: none !important;
         }
@@ -796,7 +795,6 @@
 <body>
     <div class="particles-container" id="particles"></div>
     
-    <!-- INDICATORE NASCOSTO -->
     <div class="sync-status" id="syncStatus" style="display: none;">
         <span>🔄 Connessione...</span>
     </div>
@@ -848,12 +846,14 @@
     <footer class="footer">
         <p class="footer-text">CALDARELLI - Mercato San Severino</p>
         <button class="booking-footer-btn" onclick="openBooking()">📞 Prenota un Tavolo</button>
-        <p class="footer-text" style="margin-top: 10px; font-size: 0.8rem;" id="footerStatus">Menù completo caricato</p>
+        <p class="footer-text" style="margin-top: 10px; font-size: 0.8rem;" id="footerStatus">Menù sincronizzato</p>
     </footer>
     
     <script>
-        // LISTA CATEGORIE DA ESCLUDERE (duplicate o errate)
+        // LISTA CATEGORIE DA ESCLUDERE (solo quelle veramente errate/duplicate)
         const EXCLUDED_CATEGORIES = [
+            '/START',
+            'START',
             'FOOD - TAGLIERI',
             'FOOD - PATATINE', 
             'FOOD - FRUTTA',
@@ -862,15 +862,12 @@
             'FOOD - SPECIALITA',
             'VINI AL CALICE - BIANCHI',
             'VINI AL CALICE - VINI BIANCHI',
-            'MONSTER',
-            '/START',
-            'START',
-            'FOOD - PIZZA IN PALA',
-            'CAFFETTERIA SPECIALE - CALDI',
-            'CAFFETTERIA SPECIALE'
+            'MONSTER'
+            // NOTA: Rimossi 'CAFFETTERIA SPECIALE' e 'CAFFETTERIA SPECIALE - CALDI' 
+            // perché ora il bot deve poter aggiungere prodotti a queste categorie
         ];
 
-        // MENU COMPLETO LOCALE (Funziona offline)
+        // MENU COMPLETO LOCALE
         let menuData = {
             "bar_name": "CALDARELLI",
             "location": "MERCATO SAN SEVERINO",
@@ -1215,6 +1212,7 @@
                         {"name": "Pellerossa", "price": 6.0},
                         {"name": "Pampero Anniversario", "price": 6.0},
                         {"name": "Zacapa 23", "price": 8.0},
+                        {"name": "Ryoma", "price": 9.0},
                         {"name": "Diplomatico", "price": 7.0}
                     ]
                 },
@@ -1407,52 +1405,83 @@
             return !EXCLUDED_CATEGORIES.includes(upperName);
         }
         
-        // Merge menu locale con dati Firebase
+        // Merge menu locale con dati Firebase - VERSIONE CORRETTA
         function mergeMenuData(firebaseData) {
-            if (!firebaseData || !firebaseData.categorie) return;
+            if (!firebaseData || !firebaseData.categorie) {
+                console.log("Nessun dato Firebase ricevuto");
+                return;
+            }
+            
+            console.log("Dati Firebase ricevuti:", firebaseData);
+            let hasUpdates = false;
             
             for (const [catName, products] of Object.entries(firebaseData.categorie)) {
-                // Salta categorie duplicate o errate
+                // Salta categorie invalide
                 if (!isValidCategory(catName)) {
                     console.log('Categoria esclusa:', catName);
                     continue;
                 }
                 
-                // Cerca categoria esistente (case insensitive)
+                // Cerca se esiste già una categoria con questo nome (case insensitive)
                 const existingCat = menuData.categories.find(c => 
                     c.name.toLowerCase() === catName.toLowerCase()
                 );
                 
                 if (existingCat) {
-                    // Aggiorna o aggiunge prodotti
-                    products.forEach(fbProduct => {
-                        const existingItem = existingCat.items ? existingCat.items.find(i => 
-                            i.name.toLowerCase() === fbProduct.nome.toLowerCase()
-                        ) : null;
-                        
-                        if (!existingItem && existingCat.subcategories) {
-                            // Cerca nelle sottocategorie
+                    console.log('Aggiornamento categoria esistente:', catName);
+                    
+                    // Se la categoria ha sottocategorie (es. Caffetteria Speciale -> Caldi)
+                    if (existingCat.subcategories && existingCat.subcategories.length > 0) {
+                        products.forEach(fbProduct => {
+                            // Cerca se il prodotto esiste già in qualche sottocategoria
+                            let found = false;
                             existingCat.subcategories.forEach(sub => {
-                                const subItem = sub.items.find(i => 
+                                const existingItem = sub.items.find(i => 
                                     i.name.toLowerCase() === fbProduct.nome.toLowerCase()
                                 );
-                                if (subItem) {
-                                    subItem.price = fbProduct.prezzo;
+                                if (existingItem) {
+                                    // Aggiorna prezzo
+                                    existingItem.price = fbProduct.prezzo;
+                                    found = true;
+                                    console.log('Prodotto aggiornato:', fbProduct.nome);
                                 }
                             });
-                        } else if (existingItem) {
-                            existingItem.price = fbProduct.prezzo;
-                        } else if (existingCat.items) {
-                            // Aggiunge nuovo prodotto
-                            existingCat.items.push({
-                                name: fbProduct.nome,
-                                price: fbProduct.prezzo
-                            });
-                        }
-                    });
+                            
+                            // Se non trovato, aggiungilo alla prima sottocategoria
+                            if (!found) {
+                                existingCat.subcategories[0].items.push({
+                                    name: fbProduct.nome,
+                                    price: fbProduct.prezzo
+                                });
+                                hasUpdates = true;
+                                console.log('Nuovo prodotto aggiunto:', fbProduct.nome);
+                            }
+                        });
+                    } 
+                    // Se la categoria ha items diretti (senza sottocategorie)
+                    else if (existingCat.items) {
+                        products.forEach(fbProduct => {
+                            const existingItem = existingCat.items.find(i => 
+                                i.name.toLowerCase() === fbProduct.nome.toLowerCase()
+                            );
+                            
+                            if (existingItem) {
+                                existingItem.price = fbProduct.prezzo;
+                                console.log('Prodotto aggiornato:', fbProduct.nome);
+                            } else {
+                                existingCat.items.push({
+                                    name: fbProduct.nome,
+                                    price: fbProduct.prezzo
+                                });
+                                hasUpdates = true;
+                                console.log('Nuovo prodotto aggiunto:', fbProduct.nome);
+                            }
+                        });
+                    }
                 } else {
-                    // Nuova categoria valida
-                    menuData.categories.push({
+                    // Crea nuova categoria se non esiste
+                    console.log('Creazione nuova categoria:', catName);
+                    const newCategory = {
                         id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
                         name: catName,
                         icon: '🍽️',
@@ -1460,24 +1489,46 @@
                             name: p.nome,
                             price: p.prezzo
                         }))
-                    });
+                    };
+                    menuData.categories.push(newCategory);
+                    hasUpdates = true;
+                }
+            }
+            
+            // Se ci sono aggiornamenti, rigenera il menu
+            if (hasUpdates) {
+                console.log('Rigenerazione menu...');
+                generateMenu();
+                generateMenuOverlay();
+                
+                // Aggiorna il footer
+                const footerStatus = document.getElementById('footerStatus');
+                if (footerStatus) {
+                    const now = new Date().toLocaleTimeString();
+                    footerStatus.textContent = `Ultimo aggiornamento: ${now}`;
                 }
             }
         }
         
-        // Inizializzazione Firebase (senza mostrare indicatori visibili)
+        // Inizializzazione Firebase
         function initFirebase() {
-            // Ascolta cambiamenti in tempo reale (nascosto, niente UI)
-            db.collection('menu').doc('caldarelli').onSnapshot((doc) => {
-                if (doc.exists && doc.data().categorie) {
-                    mergeMenuData(doc.data());
-                    generateMenu();
-                    generateMenuOverlay();
-                    console.log("Menu aggiornato da Telegram");
-                }
-            }, (error) => {
-                console.error("Errore Firebase:", error);
-            });
+            try {
+                // Ascolta cambiamenti in tempo reale
+                db.collection('menu').doc('caldarelli').onSnapshot((doc) => {
+                    if (doc.exists) {
+                        console.log("Snapshot Firebase ricevuto");
+                        mergeMenuData(doc.data());
+                    } else {
+                        console.log("Documento Firebase non esiste");
+                    }
+                }, (error) => {
+                    console.error("Errore Firebase:", error);
+                });
+                
+                console.log("Firebase inizializzato correttamente");
+            } catch (e) {
+                console.error("Errore inizializzazione Firebase:", e);
+            }
         }
         
         function generateMenuOverlay() {
@@ -1630,4 +1681,3 @@
     </script>
 </body>
 </html>
-
