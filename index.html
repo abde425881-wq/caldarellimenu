@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CALDARELLI - Menù Digitale</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
@@ -850,21 +849,11 @@
     </footer>
     
     <script>
-        // LISTA CATEGORIE DA ESCLUDERE (solo quelle veramente errate/duplicate)
+        // TUTTE LE CATEGORIE ESCLUSE RIMOSSE!
+        // Ora il bot può aggiungere prodotti a qualsiasi categoria: Food, Vini, etc.
         const EXCLUDED_CATEGORIES = [
-            '/START',
-            'START',
-            'FOOD - TAGLIERI',
-            'FOOD - PATATINE', 
-            'FOOD - FRUTTA',
-            'FOOD - PANINI',
-            'FOOD - SPECIALITÀ',
-            'FOOD - SPECIALITA',
-            'VINI AL CALICE - BIANCHI',
-            'VINI AL CALICE - VINI BIANCHI',
-            'MONSTER'
-            // NOTA: Rimossi 'CAFFETTERIA SPECIALE' e 'CAFFETTERIA SPECIALE - CALDI' 
-            // perché ora il bot deve poter aggiungere prodotti a queste categorie
+            // Lista vuota - nessuna categoria esclusa
+            // Puoi aggiungere qui solo se vuoi bloccare qualcosa di specifico
         ];
 
         // MENU COMPLETO LOCALE
@@ -1399,13 +1388,15 @@
             if (e.target.id === 'bookingModal') closeBooking();
         });
         
-        // Funzione per filtrare categorie duplicate
+        // Funzione per filtrare categorie - ORA ACCETTA TUTTO
         function isValidCategory(catName) {
+            // Lista vuota - accetta tutte le categorie dal bot
+            const excluded = [];
             const upperName = catName.toUpperCase().trim();
-            return !EXCLUDED_CATEGORIES.includes(upperName);
+            return !excluded.includes(upperName);
         }
         
-        // Merge menu locale con dati Firebase - VERSIONE CORRETTA
+        // Merge menu locale con dati Firebase
         function mergeMenuData(firebaseData) {
             if (!firebaseData || !firebaseData.categorie) {
                 console.log("Nessun dato Firebase ricevuto");
@@ -1416,50 +1407,78 @@
             let hasUpdates = false;
             
             for (const [catName, products] of Object.entries(firebaseData.categorie)) {
-                // Salta categorie invalide
-                if (!isValidCategory(catName)) {
-                    console.log('Categoria esclusa:', catName);
-                    continue;
+                // Gestione speciale per categorie con trattino (es. "Caffetteria Speciale - Caldi")
+                let targetCatName = catName;
+                let targetSubcatName = null;
+                
+                // Cerca pattern "Categoria - Sottocategoria"
+                const dashMatch = catName.match(/^(.+?)\s*-\s*(.+)$/);
+                if (dashMatch) {
+                    targetCatName = dashMatch[1].trim();
+                    targetSubcatName = dashMatch[2].trim();
+                    console.log(`Rilevata sottocategoria: Categoria="${targetCatName}", Sottocategoria="${targetSubcatName}"`);
                 }
                 
-                // Cerca se esiste già una categoria con questo nome (case insensitive)
+                // Cerca la categoria target (case insensitive)
                 const existingCat = menuData.categories.find(c => 
-                    c.name.toLowerCase() === catName.toLowerCase()
+                    c.name.toLowerCase() === targetCatName.toLowerCase()
                 );
                 
                 if (existingCat) {
-                    console.log('Aggiornamento categoria esistente:', catName);
+                    console.log('Trovata categoria esistente:', existingCat.name);
                     
-                    // Se la categoria ha sottocategorie (es. Caffetteria Speciale -> Caldi)
-                    if (existingCat.subcategories && existingCat.subcategories.length > 0) {
-                        products.forEach(fbProduct => {
-                            // Cerca se il prodotto esiste già in qualche sottocategoria
-                            let found = false;
-                            existingCat.subcategories.forEach(sub => {
-                                const existingItem = sub.items.find(i => 
+                    // Se è specificata una sottocategoria nel nome del bot
+                    if (targetSubcatName && existingCat.subcategories) {
+                        // Cerca la sottocategoria specifica
+                        const targetSubcat = existingCat.subcategories.find(s => 
+                            s.name.toLowerCase() === targetSubcatName.toLowerCase()
+                        );
+                        
+                        if (targetSubcat) {
+                            console.log('Trovata sottocategoria:', targetSubcat.name);
+                            
+                            products.forEach(fbProduct => {
+                                // Verifica se il prodotto esiste già
+                                const existingItem = targetSubcat.items.find(i => 
                                     i.name.toLowerCase() === fbProduct.nome.toLowerCase()
                                 );
+                                
                                 if (existingItem) {
-                                    // Aggiorna prezzo
                                     existingItem.price = fbProduct.prezzo;
-                                    found = true;
                                     console.log('Prodotto aggiornato:', fbProduct.nome);
+                                } else {
+                                    targetSubcat.items.push({
+                                        name: fbProduct.nome,
+                                        price: fbProduct.prezzo
+                                    });
+                                    hasUpdates = true;
+                                    console.log('Nuovo prodotto aggiunto:', fbProduct.nome);
                                 }
                             });
-                            
-                            // Se non trovato, aggiungilo alla prima sottocategoria
-                            if (!found) {
-                                existingCat.subcategories[0].items.push({
-                                    name: fbProduct.nome,
-                                    price: fbProduct.prezzo
+                        } else {
+                            console.log('Sottocategoria non trovata, aggiungo alla prima sottocategoria');
+                            if (existingCat.subcategories.length > 0) {
+                                products.forEach(fbProduct => {
+                                    const existingItem = existingCat.subcategories[0].items.find(i => 
+                                        i.name.toLowerCase() === fbProduct.nome.toLowerCase()
+                                    );
+                                    
+                                    if (existingItem) {
+                                        existingItem.price = fbProduct.prezzo;
+                                    } else {
+                                        existingCat.subcategories[0].items.push({
+                                            name: fbProduct.nome,
+                                            price: fbProduct.prezzo
+                                        });
+                                        hasUpdates = true;
+                                    }
                                 });
-                                hasUpdates = true;
-                                console.log('Nuovo prodotto aggiunto:', fbProduct.nome);
                             }
-                        });
+                        }
                     } 
                     // Se la categoria ha items diretti (senza sottocategorie)
                     else if (existingCat.items) {
+                        console.log('Aggiornamento items diretti');
                         products.forEach(fbProduct => {
                             const existingItem = existingCat.items.find(i => 
                                 i.name.toLowerCase() === fbProduct.nome.toLowerCase()
@@ -1501,11 +1520,10 @@
                 generateMenu();
                 generateMenuOverlay();
                 
-                // Aggiorna il footer
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
                     const now = new Date().toLocaleTimeString();
-                    footerStatus.textContent = `Ultimo aggiornamento: ${now}`;
+                    footerStatus.textContent = `Aggiornato: ${now}`;
                 }
             }
         }
@@ -1513,7 +1531,6 @@
         // Inizializzazione Firebase
         function initFirebase() {
             try {
-                // Ascolta cambiamenti in tempo reale
                 db.collection('menu').doc('caldarelli').onSnapshot((doc) => {
                     if (doc.exists) {
                         console.log("Snapshot Firebase ricevuto");
