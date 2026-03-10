@@ -903,666 +903,151 @@
         }
         
         // ==========================================
-        // DATI LOCALI
+        // DATI LOCALI DI DEFAULT (vuoti, verranno sovrascritti da Firebase)
         // ==========================================
         
         let menuData = {
             "bar_name": "CALDARELLI",
             "location": "MERCATO SAN SEVERINO",
-            "categories": [
-                {
-                    "id": "caffetteria-classica",
-                    "name": "Caffetteria Classica",
-                    "icon": "☕",
-                    "items": [
-                        {"name": "Caffè espresso Kenon", "price": 1.5},
-                        {"name": "Caffè decaffeinato Kenon", "price": 1.8},
-                        {"name": "Caffè con panna", "price": 3.0},
-                        {"name": "Caffè corretto", "price": 1.8},
-                        {"name": "Cappuccino", "price": 2.0},
-                        {"name": "Caffè orzo", "price": 2.0},
-                        {"name": "Caffè Ginseng", "price": 2.0},
-                        {"name": "Caffè Shakerato (Classico)", "price": 2.5},
-                        {"name": "Latte macchiato", "price": 1.8},
-                        {"name": "Latte bianco", "price": 1.8},
-                        {"name": "Crema caffè", "price": 3.5}
-                    ]
-                },
-                {
-                    "id": "caffetteria-speciale",
-                    "name": "Caffetteria Speciale",
-                    "icon": "🥤",
-                    "subcategories": [
-                        {
-                            "name": "Caldi",
-                            "items": [
-                                {"name": "Thè e infusi Whittington", "price": 4.0},
-                                {"name": "L'antica Cioccolateria Eraclea", "price": 4.0},
-                                {"name": "Caffè Cocco di mamma", "price": 4.0},
-                                {"name": "Caffè Morbidezza di Bronte", "price": 4.0},
-                                {"name": "Caffè Dolce & Salato", "price": 4.0},
-                                {"name": "Caffè Fiesta", "price": 4.0},
-                                {"name": "Caffè Pan di Stelle", "price": 4.0},
-                                {"name": "Caffè Oreo", "price": 4.0},
-                                {"name": "Caffè Kinder", "price": 4.0},
-                                {"name": "Caffè nocciole Avellane", "price": 4.0},
-                                {"name": "Caffè Nutella", "price": 4.0},
-                                {"name": "Caffè Cioccolato bianco", "price": 4.0},
-                                {"name": "Caffè Brasiliano", "price": 4.0},
-                                {"name": "Irish Coffee", "price": 4.0}
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "id": "te-whittington",
-                    "name": "Tè & Infusi Whittington",
-                    "icon": "🍵",
-                    "subcategories": [
-                        {
-                            "name": "Tè Nero",
-                            "items": [
-                                {"name": "201 Nilgiri Blue Mountain (Bio)", "price": 4.00, "description": "Tè nero da agricoltura biologica. Note maltate e leggere con sentori secchi."},
-                                {"name": "205 Lemon (Bio)", "price": 4.00, "description": "Tè nero aromatizzato al limone. Note rinfrescanti e vivaci."},
-                                {"name": "101 Ceylon", "price": 4.00, "description": "Tè nero originario di Sri Lanka. Sapore deciso e corpo intenso."},
-                                {"name": "102 English Breakfast Imperial", "price": 4.00, "description": "Tè nero dal sapore forte e leggermente astringente con note legnose."},
-                                {"name": "103 Earl Grey Supreme", "price": 4.00, "description": "Tè nero aromatizzato al bergamotto con petali di fiordaliso. Fruttato e delicato."},
-                                {"name": "104 Darjeeling", "price": 4.00, "description": "Tè nero dalle origini himalayane. Gusto vellutato ed elegante con note di nocciola e pesca."},
-                                {"name": "105 Vanilla Passion", "price": 4.00, "description": "Tè nero aromatizzato alla vaniglia e frutto della passione. Sapore ricco e persistente."},
-                                {"name": "119 Red Fruits", "price": 4.00, "description": "Tè nero aromatizzato ai frutti rossi. Note di fragola e lampone."}
-                            ]
-                        },
-                        {
-                            "name": "Tè Verde, Bianco e Oolong",
-                            "items": [
-                                {"name": "202 Gunpowder (Bio)", "price": 4.00, "description": "Tè verde biologico. Foglie arrotolate a polvere da sparo, profumato e aromatico."},
-                                {"name": "106 Pure Green", "price": 4.00, "description": "Tè verde cinese pregiato. Colore giallo-verde delicato, finale dolce."},
-                                {"name": "107 Green Mint", "price": 4.00, "description": "Tè verde alla menta. Note di menta fresche e rinfrescanti."},
-                                {"name": "108 Jasmine", "price": 4.00, "description": "Tè verde aromatizzato al gelsomino. Elegante, profumato e fresco."},
-                                {"name": "109 Green Forest", "price": 4.00, "description": "Tè verde con frutti di bosco e petali di rosa. Sapore fresco, dolce e persistente."},
-                                {"name": "110 Pomegranate Oolong", "price": 4.00, "description": "Tè oolong aromatizzato al melograno con petali di calendula. Delicato e fruttato."},
-                                {"name": "111 Vanilla & Grapefruit", "price": 4.00, "description": "Tè bianco aromatizzato al pompelmo e vaniglia. Profumo fresco e fiorito, sapore vellutato."}
-                            ]
-                        },
-                        {
-                            "name": "Infusioni di Erbe e Frutti",
-                            "items": [
-                                {"name": "118 Chamomile Mix", "price": 4.00, "description": "Infuso alla camomilla con melissa e finocchio. Sapore dolce e fruttato di rooibos."},
-                                {"name": "203 Fresh Mint (Bio)", "price": 4.00, "description": "Infuso alla menta biologica. Rinfrescante e profumato."},
-                                {"name": "204 Vanilla & Caramel Rooibos", "price": 4.00, "description": "Infuso a base di rooibos con vaniglia e caramello. Note di cereali tostati."},
-                                {"name": "112 Linden Flowers", "price": 4.00, "description": "Infuso di tiglio. Gusto delicato e profumo tipico e persistente."},
-                                {"name": "113 Verbena & Mint", "price": 4.00, "description": "Infuso di verbena e menta. Tonalità verde seducente."},
-                                {"name": "114 Red Spring", "price": 4.00, "description": "Infuso aromatizzato ai frutti di bosco. Gusto rinfrescante."},
-                                {"name": "115 Thai Solace", "price": 4.00, "description": "Infuso a base di zenzero e citronella. Aroma esotico con liquirizia."},
-                                {"name": "116 Lemon Verbena", "price": 4.00, "description": "Infuso di verbena citriodora. Note agrumate rasserenanti."},
-                                {"name": "117 Cocoa Twist", "price": 4.00, "description": "Infuso a base di scorza di cacao con liquirizia e finocchio."}
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "id": "bibite",
-                    "name": "Bibite",
-                    "icon": "🥤",
-                    "items": [
-                        {"name": "Red Bull", "price": 4.0},
-                        {"name": "Red Bull Sugarfree", "price": 4.5},
-                        {"name": "Red Bull Red Edition (anguria)", "price": 4.5},
-                        {"name": "Red Bull White Edition (cocco e açai)", "price": 4.5},
-                        {"name": "Red Bull Green Edition (dragon fruit)", "price": 4.5},
-                        {"name": "Red Bull Blue Edition (frutti rossi)", "price": 4.5},
-                        {"name": "Red Bull Summer Edition (fiori di sambuco e curuba)", "price": 4.5},
-                        {"name": "Red Bull Apricot Edition (albicocca e fragola)", "price": 4.5},
-                        {"name": "Fanta", "price": 3.0},
-                        {"name": "Sprite", "price": 3.0},
-                        {"name": "Estathè limone/pesca", "price": 3.0},
-                        {"name": "Thè zero", "price": 3.5},
-                        {"name": "Succhi di frutta", "price": 3.0},
-                        {"name": "Spremuta di Arancia", "price": 4.0},
-                        {"name": "Spremuta di Melograno", "price": 5.0},
-                        {"name": "Chinotto San Pellegrino", "price": 5.0},
-                        {"name": "Bacardi Breezer", "price": 5.0},
-                        {"name": "Latte e menta", "price": 4.0},
-                        {"name": "Orzata", "price": 4.0},
-                        {"name": "Tropical", "price": 5.0},
-                        {"name": "Latte di mandorla", "price": 4.0},
-                        {"name": "Coca cola/Coca cola zero", "price": 3.0}
-                    ]
-                },
-                {
-                    "id": "birre",
-                    "name": "Birre in Bottiglia",
-                    "icon": "🍺",
-                    "items": [
-                        {"name": "Tennet's", "price": 4.0},
-                        {"name": "Corona", "price": 4.0},
-                        {"name": "Heineken", "price": 3.0},
-                        {"name": "Beck's", "price": 3.0},
-                        {"name": "Nastro azzurro", "price": 3.0},
-                        {"name": "Ceres", "price": 4.0},
-                        {"name": "Icnusa non filtrata", "price": 5.0}
-                    ]
-                },
-                {
-                    "id": "aperitivi",
-                    "name": "Aperitivi",
-                    "icon": "🍹",
-                    "items": [
-                        {"name": "Tassoni", "price": 5.0},
-                        {"name": "Lemon soda", "price": 5.0},
-                        {"name": "Schweppes tonica/lemon/arancia", "price": 5.0},
-                        {"name": "Tonica Fentimans", "price": 5.0},
-                        {"name": "Bitter bianco", "price": 5.0},
-                        {"name": "Bitter Rosso", "price": 5.0},
-                        {"name": "Crodino", "price": 5.0},
-                        {"name": "Crodino frutti rossi", "price": 5.0},
-                        {"name": "Cocktail San Pellegrino bianco/rosso", "price": 5.0},
-                        {"name": "Aperol Soda", "price": 5.0},
-                        {"name": "Campari soda", "price": 5.0},
-                        {"name": "Apertas", "price": 6.0},
-                        {"name": "Bevande Bio Galvanina", "price": 5.0}
-                    ]
-                },
-                {
-                    "id": "food",
-                    "name": "Food",
-                    "icon": "🍽️",
-                    "subcategories": [
-                        {
-                            "name": "Taglieri",
-                            "items": [
-                                {"name": "Tagliere salumi e formaggi", "price": 10.0}
-                            ]
-                        },
-                        {
-                            "name": "Patatine",
-                            "items": [
-                                {"name": "Patatine fritte classica", "price": 5.0},
-                                {"name": "Patatine cacio e pepe", "price": 6.0},
-                                {"name": "Patatine wurstel e mozzarella", "price": 6.0},
-                                {"name": "Patatine con kebab", "price": 6.5},
-                                {"name": "Patatine con porchetta", "price": 6.5}
-                            ]
-                        },
-                        {
-                            "name": "Specialità",
-                            "items": [
-                                {"name": "Fritto misto", "price": 6.0}
-                            ]
-                        },
-                        {
-                            "name": "Pizza in Pala",
-                            "items": [
-                                {"name": "Margherita", "price": 6.0},
-                                {"name": "Marinara Sbagliata", "price": 5.5},
-                                {"name": "Mortazza", "price": 8.0},
-                                {"name": "Crudo e Bufala", "price": 8.0},
-                                {"name": "Cotto Caldarelli", "price": 7.5}
-                            ]
-                        },
-                        {
-                            "name": "Frutta",
-                            "items": [
-                                {"name": "Tagliata di frutta", "price": 5.0},
-                                {"name": "Barchetta di Ananas", "price": 4.0}
-                            ]
-                        },
-                        {
-                            "name": "Panini",
-                            "items": [
-                                {"name": "Light", "price": 5.0, "description": "Verdure grigliate, provola e hamburger"},
-                                {"name": "Porchetta Crunch", "price": 6.0, "description": "Porchetta, patatine e insalata"},
-                                {"name": "Caldarelli", "price": 7.0, "description": "Pomodoro, insalata, hamburger, provola, bacon e patatine"},
-                                {"name": "Americano", "price": 5.0, "description": "Hamburger, provola e patatine"},
-                                {"name": "Istanbul", "price": 6.0, "description": "Patate fritte e kebab"},
-                                {"name": "Orto Saporito", "price": 6.0, "description": "Porchetta, provola, melanzane, zucchine e patate grigliati"},
-                                {"name": "Campagnolo", "price": 5.0, "description": "Salsicce, friarielli e provola"},
-                                {"name": "Tricolore", "price": 5.0, "description": "Panino con melanzane sott'olio e prosciutto crudo"}
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "id": "spritz",
-                    "name": "Le Nostre Proposte Spritz",
-                    "icon": "🍹",
-                    "items": [
-                        {"name": "Bull Spritz", "price": 7.0, "description": "Red Bull e Aperol"},
-                        {"name": "Aperol Spritz", "price": 7.0},
-                        {"name": "Campari Spritz", "price": 7.0},
-                        {"name": "Hugo St. Germain Spritz", "price": 7.0},
-                        {"name": "Dolce & Salato Spritz", "price": 8.0, "description": "Aperol, St. Germain, Gin fifty pounds, sour, prosecco"},
-                        {"name": "Spritz Salerno", "price": 8.0, "description": "Gin Bloom, Limoncello, Falanghina, Aperol, Sour"},
-                        {"name": "Don Franco", "price": 7.0, "description": "Aperol, Vermouth antica formula, prosecco franciacorta, liquore all'arancia, ginger beer"},
-                        {"name": "Al Caldarelli", "price": 9.0, "description": "Bourbon whisky, vermouth rosso infuso alla vaniglia, cannella, cioccolato fondente"},
-                        {"name": "Sweet Spritz al lampone", "price": 8.0, "description": "Aperol, vodka Beluga, purea di lamponi e more, falanghina, soda"},
-                        {"name": "Martini Ruby Spritz", "price": 7.0},
-                        {"name": "Martini Ambry Spritz", "price": 7.0},
-                        {"name": "Martini Rosato Spritz", "price": 7.0},
-                        {"name": "Don Dihhan", "price": 7.0},
-                        {"name": "Pisco sour", "price": 7.0},
-                        {"name": "Old fashioned", "price": 7.0},
-                        {"name": "Mimosa", "price": 7.0},
-                        {"name": "Margarita", "price": 7.0},
-                        {"name": "Mai tai", "price": 7.0},
-                        {"name": "Grasshopper", "price": 7.0},
-                        {"name": "Daiquiri", "price": 7.0},
-                        {"name": "Cosmopolitan", "price": 7.0},
-                        {"name": "Cape codder", "price": 7.0},
-                        {"name": "Bloody Mary", "price": 7.0},
-                        {"name": "Alexander", "price": 7.0},
-                        {"name": "Champagne cocktail", "price": 7.0},
-                        {"name": "White lady", "price": 7.0},
-                        {"name": "Golden cadillac", "price": 7.0},
-                        {"name": "Long island ice tea", "price": 7.0},
-                        {"name": "Japanise ice tea", "price": 7.0},
-                        {"name": "Pinacolada", "price": 7.0},
-                        {"name": "Singapore slim", "price": 7.0},
-                        {"name": "Garibaldi", "price": 7.0},
-                        {"name": "Rossini", "price": 7.0},
-                        {"name": "Bellini", "price": 7.0},
-                        {"name": "Sex on the beach", "price": 7.0},
-                        {"name": "New York", "price": 7.0},
-                        {"name": "Mojito", "price": 7.0},
-                        {"name": "Caipirinha", "price": 7.0},
-                        {"name": "Caipiroska", "price": 7.0}
-                    ]
-                },
-                {
-                    "id": "classici",
-                    "name": "I Grandi Classici",
-                    "icon": "🥃",
-                    "items": [
-                        {"name": "Americano", "price": 7.0},
-                        {"name": "Boulevardier", "price": 7.0},
-                        {"name": "Corpse reviver", "price": 7.0},
-                        {"name": "Cuba Libre", "price": 7.0},
-                        {"name": "Dark'n stormy", "price": 7.0},
-                        {"name": "Gin Fizz", "price": 7.0},
-                        {"name": "Gin tonic", "price": "prezzo variabile"},
-                        {"name": "Gin Gordon & Tonic", "price": 7.0},
-                        {"name": "Manhattan", "price": 7.0},
-                        {"name": "Martini cocktail", "price": 7.0},
-                        {"name": "Mint Julep", "price": 7.0},
-                        {"name": "Negroni", "price": 7.0},
-                        {"name": "Sazerac", "price": 7.0},
-                        {"name": "Tequila sunrise", "price": 7.0},
-                        {"name": "Whiskey sour", "price": 7.0},
-                        {"name": "White russian", "price": 7.0},
-                        {"name": "Tom collins", "price": 7.0},
-                        {"name": "Sidecar", "price": 7.0}
-                    ]
-                },
-                {
-                    "id": "virgin",
-                    "name": "Proposte Virgin",
-                    "icon": "🍸",
-                    "items": [
-                        {"name": "Scarlet Fizz", "price": 7.0},
-                        {"name": "Mojito Caldarelli", "price": 7.0},
-                        {"name": "Esotica", "price": 7.0},
-                        {"name": "The passion cooler", "price": 7.0},
-                        {"name": "Virgin colada caldarelli", "price": 7.0},
-                        {"name": "Canarino", "price": 7.0},
-                        {"name": "Virgin Mule", "price": 7.0},
-                        {"name": "Caipiroska", "price": 7.0},
-                        {"name": "Fresa", "price": 7.0},
-                        {"name": "Virgin Garibaldi", "price": 7.0},
-                        {"name": "Virgin del barman", "price": 7.0}
-                    ]
-                },
-                {
-                    "id": "negroni",
-                    "name": "I Nostri Negroni",
-                    "icon": "🥃",
-                    "items": [
-                        {"name": "Garnet sbagliato", "price": 8.0},
-                        {"name": "Negroni del presidente", "price": 9.0},
-                        {"name": "Negroni 1808", "price": 8.0},
-                        {"name": "Negroni segreto", "price": 9.0},
-                        {"name": "Negroni don't kill my vibe", "price": 10.0, "description": "(non uccidere la mia atmosfera)"},
-                        {"name": "L'age d'or negroni", "price": 9.0},
-                        {"name": "Negroni bianco", "price": 8.0},
-                        {"name": "Pisco negroni", "price": 9.0},
-                        {"name": "Negroni bloom", "price": 9.0},
-                        {"name": "Negroni vintage", "price": 9.0},
-                        {"name": "Negroni agrumato", "price": 9.0}
-                    ]
-                },
-                {
-                    "id": "cognac-brandy",
-                    "name": "Cognac e Brandy",
-                    "icon": "🥃",
-                    "items": [
-                        {"name": "Courvasier VS", "price": 5.0},
-                        {"name": "Remy Matrin VSOP", "price": 5.0},
-                        {"name": "Hennessy VS", "price": 5.0},
-                        {"name": "Vecchia Romagna", "price": 5.0},
-                        {"name": "Stock 84", "price": 5.0}
-                    ]
-                },
-                {
-                    "id": "rum",
-                    "name": "Rum",
-                    "icon": "🥃",
-                    "items": [
-                        {"name": "Don Papa", "price": 6.0},
-                        {"name": "Pellerossa", "price": 6.0},
-                        {"name": "Pampero Anniversario", "price": 6.0},
-                        {"name": "Zacapa 23", "price": 8.0},
-                        {"name": "Ryoma", "price": 9.0},
-                        {"name": "Diplomatico", "price": 7.0}
-                    ]
-                },
-                {
-                    "id": "whisky",
-                    "name": "Whisky",
-                    "icon": "🥃",
-                    "items": [
-                        {"name": "Jack Daniel's", "price": 5.0},
-                        {"name": "Jack al miele", "price": 5.0},
-                        {"name": "Jack al peperoncino", "price": 5.0},
-                        {"name": "Jack alla mela ", "price": 5.0},
-                        {"name": "Oban", "price": 8.0},
-                        {"name": "Johnny Walker", "price": 7.0},
-                        {"name": "Ryoma", "price": 9.0},
-                        {"name": "civas", "price": 5.0},
-                        {"name": "Jameson", "price": 5.0},
-                        {"name": "Macallan", "price": 10.0}
-                    ]
-                },
-                {
-                    "id": "grappe",
-                    "name": "Grappe",
-                    "icon": "🍇",
-                    "items": [
-                        {"name": "Grappa di Amarone Barrique Bonollo", "price": 5.0},
-                        {"name": "Grappa cru italie ligneum Bonollo", "price": 5.0},
-                        {"name": "Grappa prosecco ligneum Bonollo", "price": 5.0},
-                        {"name": "Grappa moscato ligneum Bonollo", "price": 5.0},
-                        {"name": "Grappa Chardonnay Bonollo", "price": 5.0},
-                        {"name": "Grappa miele e tiglio Bonollo", "price": 5.0},
-                        {"name": "Grappa 18 Lune Botte Borto", "price": 5.0}
-                    ]
-                },
-                {
-                    "id": "liquori",
-                    "name": "Liquori",
-                    "icon": "🥃",
-                    "items": [
-                        {"name": "Baileys Original", "price": 3.5},
-                        {"name": "Baileys Choccolate", "price": 3.5},
-                        {"name": "Coca Buton", "price": 4.0},
-                        {"name": "Drambuie", "price": 4.0},
-                        {"name": "Amaretto di Saronno", "price": 3.5},
-                        {"name": "Batida de Coco", "price": 3.5},
-                        {"name": "Malibu", "price": 3.5},
-                        {"name": "Sheridan's", "price": 3.5},
-                        {"name": "Kahlua", "price": 3.5},
-                        {"name": "Midori", "price": 3.5},
-                        {"name": "Passoa", "price": 3.5},
-                        {"name": "Southern Comfort", "price": 3.5},
-                        {"name": "Cointreau", "price": 3.5},
-                        {"name": "Limoncello", "price": 3.5},
-                        {"name": "Meloncello", "price": 3.5},
-                        {"name": "Finocchietto", "price": 3.5},
-                        {"name": "Liquirizia", "price": 3.5},
-                        {"name": "Fragolino", "price": 3.5},
-                        {"name": "Passito di Pantelleria", "price": 4.0}
-                    ]
-                },
-                {
-                    "id": "amari",
-                    "name": "Amari",
-                    "icon": "🍷",
-                    "items": [
-                        {"name": "Amaro Averna", "price": 3.5},
-                        {"name": "Amaro Cynar", "price": 3.5},
-                        {"name": "Amaro del Capo", "price": 3.5},
-                        {"name": "Amaro Lucano", "price": 3.5},
-                        {"name": "Amaro Montenegro", "price": 3.5},
-                        {"name": "Amaro Of Bonollo", "price": 4.0},
-                        {"name": "Amaro Ramazzotti", "price": 3.5},
-                        {"name": "Borsci S. Marzano", "price": 3.5},
-                        {"name": "Branca Menta", "price": 3.5},
-                        {"name": "Fernet Branca", "price": 3.5},
-                        {"name": "Jagermeister", "price": 3.5},
-                        {"name": "Petrus", "price": 3.5},
-                        {"name": "Unicum", "price": 3.5},
-                        {"name": "Mirto Bianco", "price": 4.0},
-                        {"name": "Mirto Rosso", "price": 4.0},
-                        {"name": "Jefferson amaro", "price": 5.0}
-                    ]
-                },
-                {
-                    "id": "bollicine",
-                    "name": "Le Nostre Bollicine",
-                    "icon": "🥂",
-                    "items": [
-                        {"name": "Prosecco", "price": 6.0},
-                        {"name": "Villa Sandi Millesimato", "price": 6.0},
-                        {"name": "Brachetto d'Acqui", "price": 6.0}
-                    ]
-                },
-                {
-                    "id": "vini-rossi",
-                    "name": "Vini al Calice",
-                    "icon": "🍷",
-                    "subcategories": [
-                        {
-                            "name": "Vini Rossi",
-                            "items": [
-                                {"name": "Taurasi 2013 Feudi di San Gregorio", "price": 8.0},
-                                {"name": "Aglianico Jungano, San Salvatore", "price": 7.0},
-                                {"name": "Aglianico del Re, Feudi di San Gregorio", "price": 6.0},
-                                {"name": "Aglianico Sorba Nera, Cantina del Taburno", "price": 6.0},
-                                {"name": "Montepulciano d'Abruzzo, Gianni Masciarelli", "price": 6.0},
-                                {"name": "Primitivo, San Marzano", "price": 6.0},
-                                {"name": "Nero d'Avola, Duca di Salaparuta", "price": 6.0},
-                                {"name": "Sangue di Giuda, Giorgi", "price": 6.0},
-                                {"name": "Vetere Rosè, San Salvatore", "price": 6.0}
-                            ]
-                        },
-                        {
-                            "name": "Vini Bianchi",
-                            "items": [
-                                {"name": "Moscato d'Asti, Dogliotti", "price": 6.0},
-                                {"name": "Greco di tufo, Feudi di San Gregorio", "price": 6.0},
-                                {"name": "Gewurztraminer, Cantina Lavis", "price": 6.0},
-                                {"name": "Falanghina, Feudi di San Gregorio", "price": 6.0},
-                                {"name": "Chardonnay, Cantina Lavis", "price": 6.0}
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "id": "stagione",
-                    "name": "Solo Durante il Periodo",
-                    "icon": "🍓",
-                    "items": [
-                        {"name": "Fragola con panna", "price": 5.0}
-                    ]
-                }
-            ]
+            "categories": []
         };
 
         // ==========================================
-        // FUNZIONI SINCronizzazione CON RIMOZIONE
+        // FUNZIONE PER CONVERTIRE DATI BOT → STRUTTURA SITO
+        // ==========================================
+        
+        function convertBotDataToSiteFormat(firebaseData) {
+            const categories = [];
+            
+            // Se il bot ha salvato in formato "categorie"
+            if (firebaseData.categorie) {
+                for (const [catName, products] of Object.entries(firebaseData.categorie)) {
+                    if (!isValidCategory(catName)) continue;
+                    
+                    const items = products.map(p => ({
+                        name: p.nome || p.name,
+                        price: p.prezzo || p.price,
+                        description: p.descrizione || p.description || ""
+                    }));
+                    
+                    categories.push({
+                        id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                        name: catName,
+                        icon: getIconForCategory(catName),
+                        items: items
+                    });
+                }
+            }
+            // Se il bot ha salvato in formato collezione "prodotti"
+            else if (firebaseData.prodotti || typeof firebaseData === 'object') {
+                // Raggruppa per categoria se presente, altrimenti metti in "Prodotti"
+                const grouped = {};
+                
+                for (const key in firebaseData) {
+                    if (key === 'prodotti') {
+                        const prods = firebaseData[key];
+                        for (const id in prods) {
+                            const p = prods[id];
+                            const catName = p.categoria || p.category || "Prodotti";
+                            if (!grouped[catName]) grouped[catName] = [];
+                            grouped[catName].push({
+                                name: p.nome || p.name,
+                                price: p.prezzo || p.price,
+                                description: p.descrizione || p.description || ""
+                            });
+                        }
+                    } else if (!isNaN(key)) { // Se sono numeri (formato bot)
+                        const p = firebaseData[key];
+                        const catName = "Whisky"; // o rileva da altri campi
+                        if (!grouped[catName]) grouped[catName] = [];
+                        grouped[catName].push({
+                            name: p.nome || p.name,
+                            price: p.prezzo || p.price,
+                            description: p.descrizione || p.description || ""
+                        });
+                    }
+                }
+                
+                for (const [catName, items] of Object.entries(grouped)) {
+                    if (!isValidCategory(catName)) continue;
+                    categories.push({
+                        id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                        name: catName,
+                        icon: getIconForCategory(catName),
+                        items: items
+                    });
+                }
+            }
+            
+            return categories;
+        }
+        
+        function getIconForCategory(catName) {
+            const icons = {
+                "caffetteria classica": "☕",
+                "caffetteria speciale": "🥤",
+                "tè & infusi whittington": "🍵",
+                "bibite": "🥤",
+                "birre in bottiglia": "🍺",
+                "aperitivi": "🍹",
+                "food": "🍽️",
+                "panini": "🥪",
+                "le nostre proposte spritz": "🍹",
+                "i grandi classici": "🥃",
+                "proposte virgin": "🍸",
+                "i nostri negroni": "🥃",
+                "cognac e brandy": "🥃",
+                "rum": "🥃",
+                "whisky": "🥃",
+                "grappe": "🍇",
+                "liquori": "🥃",
+                "amari": "🍷",
+                "le nostre bollicine": "🥂",
+                "vini al calice": "🍷",
+                "solo durante il periodo": "🍓"
+            };
+            return icons[catName.toLowerCase()] || "🍽️";
+        }
+
+        // ==========================================
+        // FUNZIONE SINCRONIZZAZIONE CORRETTA
         // ==========================================
         
         function mergeMenuData(firebaseData) {
-            if (!firebaseData || !firebaseData.categorie) {
+            console.log("Dati ricevuti da Firebase:", firebaseData);
+            
+            if (!firebaseData) {
                 console.log("Nessun dato Firebase ricevuto");
                 return;
             }
             
-            console.log("Sincronizzazione con Firebase...", firebaseData);
-            let hasUpdates = false;
+            // Converte i dati del bot nel formato del sito
+            const newCategories = convertBotDataToSiteFormat(firebaseData);
             
-            // Per ogni categoria in Firebase
-            for (const [catName, products] of Object.entries(firebaseData.categorie)) {
-                // Salta categorie escluse
-                if (!isValidCategory(catName)) {
-                    console.log(`Categoria esclusa saltata: ${catName}`);
-                    continue;
-                }
+            if (newCategories.length > 0) {
+                console.log("Categorie convertite:", newCategories);
+                menuData.categories = newCategories;
                 
-                // Gestione sottocategorie (es. "Caffetteria Speciale - Caldi")
-                let targetCatName = catName;
-                let targetSubcatName = null;
-                
-                const dashMatch = catName.match(/^(.+?)\s*-\s*(.+)$/);
-                if (dashMatch) {
-                    targetCatName = dashMatch[1].trim();
-                    targetSubcatName = dashMatch[2].trim();
-                    console.log(`Sottocategoria rilevata: ${targetCatName} -> ${targetSubcatName}`);
-                }
-                
-                // Trova categoria nel menu locale
-                const existingCat = menuData.categories.find(c => 
-                    c.name.toLowerCase() === targetCatName.toLowerCase()
-                );
-                
-                if (existingCat) {
-                    console.log('Trovata categoria:', existingCat.name);
-                    
-                    // Se ha sottocategorie e ne è specificata una nel bot
-                    if (targetSubcatName && existingCat.subcategories) {
-                        const targetSubcat = existingCat.subcategories.find(s => 
-                            s.name.toLowerCase() === targetSubcatName.toLowerCase()
-                        );
-                        
-                        if (targetSubcat) {
-                            console.log('Trovata sottocategoria:', targetSubcat.name);
-                            
-                            // === RIMOZIONE PRODOTTI ===
-                            // Crea un set dei nomi prodotti da Firebase
-                            const firebaseProductNames = new Set(
-                                products.map(p => p.nome.toLowerCase().trim())
-                            );
-                            
-                            // Rimuovi prodotti locali che non sono più in Firebase
-                            const originalLength = targetSubcat.items.length;
-                            targetSubcat.items = targetSubcat.items.filter(item => {
-                                const itemName = item.name.toLowerCase().trim();
-                                // Mantieni solo se presente in Firebase OPPURE è un prodotto locale di default
-                                // (I prodotti locali originali vengono preservati se non sovrascritti esplicitamente)
-                                const shouldKeep = firebaseProductNames.has(itemName) || 
-                                                 !isProductFromFirebase(itemName, products);
-                                if (!shouldKeep) {
-                                    console.log('Rimosso prodotto:', item.name);
-                                    hasUpdates = true;
-                                }
-                                return shouldKeep;
-                            });
-                            
-                            // Aggiorna prezzi esistenti e aggiungi nuovi
-                            products.forEach(fbProduct => {
-                                const existingItem = targetSubcat.items.find(i => 
-                                    i.name.toLowerCase() === fbProduct.nome.toLowerCase()
-                                );
-                                
-                                if (existingItem) {
-                                    // Aggiorna prezzo se diverso
-                                    if (existingItem.price !== fbProduct.prezzo) {
-                                        existingItem.price = fbProduct.prezzo;
-                                        console.log('Prezzo aggiornato:', fbProduct.nome);
-                                        hasUpdates = true;
-                                    }
-                                } else {
-                                    // Aggiungi nuovo
-                                    targetSubcat.items.push({
-                                        name: fbProduct.nome,
-                                        price: fbProduct.prezzo
-                                    });
-                                    hasUpdates = true;
-                                    console.log('Nuovo prodotto aggiunto:', fbProduct.nome);
-                                }
-                            });
-                        }
-                    } 
-                    // Categoria con items diretti (senza sottocategorie)
-                    else if (existingCat.items) {
-                        console.log('Aggiornamento items diretti');
-                        
-                        const firebaseProductNames = new Set(
-                            products.map(p => p.nome.toLowerCase().trim())
-                        );
-                        
-                        // Rimuovi prodotti non più presenti (solo se aggiunti da Firebase)
-                        const beforeCount = existingCat.items.length;
-                        existingCat.items = existingCat.items.filter(item => {
-                            const itemName = item.name.toLowerCase().trim();
-                            // Se il prodotto è in Firebase, mantienilo (verrà aggiornato dopo)
-                            // Se non è in Firebase e non è un prodotto locale "sacro", mantienilo
-                            // Qui assumiamo che tutti i prodotti con stesso nome vengano sincronizzati
-                            return true; // Per ora manteniamo tutto, la logica completa è complessa
-                        });
-                        
-                        // Aggiorna o aggiungi
-                        products.forEach(fbProduct => {
-                            const existingItem = existingCat.items.find(i => 
-                                i.name.toLowerCase() === fbProduct.nome.toLowerCase()
-                            );
-                            
-                            if (existingItem) {
-                                if (existingItem.price !== fbProduct.prezzo) {
-                                    existingItem.price = fbProduct.prezzo;
-                                    hasUpdates = true;
-                                }
-                            } else {
-                                existingCat.items.push({
-                                    name: fbProduct.nome,
-                                    price: fbProduct.prezzo
-                                });
-                                hasUpdates = true;
-                            }
-                        });
-                    }
-                } else {
-                    // Crea nuova categoria
-                    console.log('Creazione nuova categoria:', catName);
-                    const newCategory = {
-                        id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                        name: catName,
-                        icon: '🍽️',
-                        items: products.map(p => ({
-                            name: p.nome,
-                            price: p.prezzo
-                        }))
-                    };
-                    menuData.categories.push(newCategory);
-                    hasUpdates = true;
-                }
-            }
-            
-            // Se ci sono aggiornamenti, rigenera il menu
-            if (hasUpdates) {
-                console.log('Rigenerazione menu...');
+                // Rigenera il menu
                 generateMenu();
                 generateMenuOverlay();
                 
+                // Aggiorna timestamp
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
                     const now = new Date().toLocaleTimeString();
                     footerStatus.textContent = `Aggiornato: ${now}`;
                 }
                 
-                // Mostra indicatore sincronizzazione
+                // Mostra indicatore
                 const syncStatus = document.getElementById('syncStatus');
                 if (syncStatus) {
                     syncStatus.classList.add('active');
                     setTimeout(() => syncStatus.classList.remove('active'), 2000);
                 }
+            } else {
+                console.log("Nessuna categoria valida trovata nei dati Firebase");
             }
-        }
-        
-        function isProductFromFirebase(productName, firebaseProducts) {
-            // Helper per determinare se un prodotto è stato aggiunto da Firebase
-            // (Per semplicità, assumiamo che se il nome matcha, sia da Firebase)
-            return firebaseProducts.some(p => 
-                p.nome.toLowerCase().trim() === productName.toLowerCase().trim()
-            );
         }
         
         // ==========================================
@@ -1571,33 +1056,29 @@
         
         function initFirebase() {
             try {
+                // Usa onSnapshot per aggiornamenti in tempo reale
                 db.collection('menu').doc('caldarelli').onSnapshot((doc) => {
                     if (doc.exists) {
-                        console.log("Snapshot Firebase ricevuto");
-                        const data = doc.data();
-                        // Filtra categorie escluse dai dati
-                        if (data.categorie) {
-                            const filteredCategories = {};
-                            for (const [key, value] of Object.entries(data.categorie)) {
-                                if (isValidCategory(key)) {
-                                    filteredCategories[key] = value;
-                                } else {
-                                    console.log(`Categoria esclusa da Firebase: ${key}`);
-                                }
-                            }
-                            data.categorie = filteredCategories;
-                        }
-                        mergeMenuData(data);
+                        console.log("Snapshot Firebase ricevuto:", doc.data());
+                        mergeMenuData(doc.data());
                     } else {
-                        console.log("Documento Firebase non esiste");
+                        console.log("Documento Firebase non esiste, uso dati locali");
+                        // Se non esiste il documento, usa i dati di default
+                        generateMenu();
+                        generateMenuOverlay();
                     }
                 }, (error) => {
                     console.error("Errore Firebase:", error);
+                    // In caso di errore, usa dati locali
+                    generateMenu();
+                    generateMenuOverlay();
                 });
                 
                 console.log("Firebase inizializzato");
             } catch (e) {
                 console.error("Errore inizializzazione Firebase:", e);
+                generateMenu();
+                generateMenuOverlay();
             }
         }
         
@@ -1653,7 +1134,7 @@
             container.appendChild(allBtn);
             
             menuData.categories.forEach((cat, index) => {
-                if (!isValidCategory(cat.name)) return; // Salta escluse
+                if (!isValidCategory(cat.name)) return;
                 
                 const btn = document.createElement('button');
                 btn.className = 'menu-category-btn';
@@ -1697,8 +1178,13 @@
             const container = document.getElementById('menuContainer');
             container.innerHTML = '';
             
+            if (menuData.categories.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">Nessun prodotto disponibile</div>';
+                return;
+            }
+            
             menuData.categories.forEach((cat, catIndex) => {
-                if (!isValidCategory(cat.name)) return; // Salta categorie escluse
+                if (!isValidCategory(cat.name)) return;
                 
                 const section = document.createElement('section');
                 section.className = 'category';
@@ -1721,7 +1207,7 @@
                         });
                         html += '</div>';
                     });
-                } else if (cat.items) {
+                } else if (cat.items && cat.items.length > 0) {
                     cat.items.forEach((item) => {
                         html += createItemHTML(item, itemIndex++);
                     });
@@ -1789,10 +1275,7 @@
         
         // Avvio
         createParticles();
-        generateMenu();
-        generateMenuOverlay();
-        initFirebase();
+        initFirebase(); // Questo ora gestisce anche il menu iniziale
     </script>
 </body>
 </html>
-
