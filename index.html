@@ -903,13 +903,79 @@
         }
         
         // ==========================================
-        // DATI LOCALI DI DEFAULT (vuoti, verranno sovrascritti da Firebase)
+        // DATI LOCALI - FOOD CON TUTTE LE SOTTOCATEGORIE
         // ==========================================
         
         let menuData = {
             "bar_name": "CALDARELLI",
             "location": "MERCATO SAN SEVERINO",
-            "categories": []
+            "categories": [
+                {
+                    "id": "food",
+                    "name": "Food",
+                    "icon": "🍽️",
+                    "subcategories": [
+                        {
+                            "name": "Panini",
+                            "items": [
+                                {"name": "Light", "price": 5.0, "description": "Verdure grigliate, provola e hamburger"},
+                                {"name": "Porchetta Crunch", "price": 6.0, "description": "Porchetta, patatine e insalata"},
+                                {"name": "Caldarelli", "price": 7.0, "description": "Pomodoro, insalata, hamburger, provola, bacon e patatine"},
+                                {"name": "Americano", "price": 5.0, "description": "Hamburger, provola e patatine"},
+                                {"name": "Istanbul", "price": 6.0, "description": "Patate fritte e kebab"},
+                                {"name": "Orto Saporito", "price": 6.0, "description": "Porchetta, provola, melanzane, zucchine e patate grigliati"},
+                                {"name": "Campagnolo", "price": 5.0, "description": "Salsicce, friarielli e provola"},
+                                {"name": "Tricolore", "price": 5.0, "description": "Panino con melanzane sott'olio e prosciutto crudo"}
+                            ]
+                        },
+                        {
+                            "name": "Taglieri",
+                            "items": [
+                                {"name": "Tagliere di Salumi", "price": 12.0, "description": "Selezione di salumi tipici locali"},
+                                {"name": "Tagliere di Formaggi", "price": 12.0, "description": "Selezione di formaggi artigianali"},
+                                {"name": "Tagliere Misto", "price": 15.0, "description": "Salumi e formaggi misti"},
+                                {"name": "Tagliere Veggie", "price": 10.0, "description": "Verdure grigliate e sott'olio"}
+                            ]
+                        },
+                        {
+                            "name": "Patatine",
+                            "items": [
+                                {"name": "Patatine Fritte", "price": 4.0, "description": "Classiche patatine fritte"},
+                                {"name": "Patatine Rustiche", "price": 5.0, "description": "Patate al forno con rosmarino"},
+                                {"name": "Patatine con Cheddar", "price": 6.0, "description": "Patatine con salsa cheddar"},
+                                {"name": "Patatine Bacon", "price": 6.0, "description": "Patatine con bacon croccante"}
+                            ]
+                        },
+                        {
+                            "name": "Specialità",
+                            "items": [
+                                {"name": "Olive Ascolane", "price": 6.0, "description": "Olive all'ascolana fritte"},
+                                {"name": "Supplì", "price": 5.0, "description": "Supplì al telefono"},
+                                {"name": "Crocchette", "price": 5.0, "description": "Crocchette di patate"},
+                                {"name": "Arancini", "price": 5.0, "description": "Arancini siciliani"}
+                            ]
+                        },
+                        {
+                            "name": "Pizza in Pala",
+                            "items": [
+                                {"name": "Margherita", "price": 8.0, "description": "Pomodoro, mozzarella, basilico"},
+                                {"name": "Marinara", "price": 7.0, "description": "Pomodoro, aglio, origano"},
+                                {"name": "Diavola", "price": 9.0, "description": "Pomodoro, mozzarella, salame piccante"},
+                                {"name": "Quattro Formaggi", "price": 10.0, "description": "Mozzarella e selezione di formaggi"}
+                            ]
+                        },
+                        {
+                            "name": "Frutta",
+                            "items": [
+                                {"name": "Macedonia", "price": 5.0, "description": "Frutta fresca mista"},
+                                {"name": "Ananas", "price": 4.0, "description": "Ananas fresco"},
+                                {"name": "Anguria", "price": 4.0, "description": "Anguria fresca"},
+                                {"name": "Melone", "price": 4.0, "description": "Melone fresco"}
+                            ]
+                        }
+                    ]
+                }
+            ]
         };
 
         // ==========================================
@@ -924,58 +990,111 @@
                 for (const [catName, products] of Object.entries(firebaseData.categorie)) {
                     if (!isValidCategory(catName)) continue;
                     
-                    const items = products.map(p => ({
-                        name: p.nome || p.name,
-                        price: p.prezzo || p.price,
-                        description: p.descrizione || p.description || ""
-                    }));
-                    
-                    categories.push({
-                        id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                        name: catName,
-                        icon: getIconForCategory(catName),
-                        items: items
-                    });
+                    // Se è una sottocategoria di Food (es. "Food - Panini")
+                    if (catName.toLowerCase().startsWith('food')) {
+                        // Gestisci sottocategorie Food
+                        const subcatName = catName.split('-')[1]?.trim() || catName;
+                        const items = products.map(p => ({
+                            name: p.nome || p.name,
+                            price: typeof p.prezzo === 'number' ? p.prezzo : (typeof p.price === 'number' ? p.price : 0),
+                            description: p.descrizione || p.description || ""
+                        }));
+                        
+                        // Trova o crea categoria Food
+                        let foodCat = categories.find(c => c.id === 'food');
+                        if (!foodCat) {
+                            foodCat = {
+                                id: 'food',
+                                name: 'Food',
+                                icon: '🍽️',
+                                subcategories: []
+                            };
+                            categories.push(foodCat);
+                        }
+                        
+                        foodCat.subcategories.push({
+                            name: subcatName,
+                            items: items
+                        });
+                    } else {
+                        // Altre categorie normali
+                        const items = products.map(p => ({
+                            name: p.nome || p.name,
+                            price: typeof p.prezzo === 'number' ? p.prezzo : (typeof p.price === 'number' ? p.price : 0),
+                            description: p.descrizione || p.description || ""
+                        }));
+                        
+                        categories.push({
+                            id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                            name: catName,
+                            icon: getIconForCategory(catName),
+                            items: items
+                        });
+                    }
                 }
             }
-            // Se il bot ha salvato in formato collezione "prodotti"
-            else if (firebaseData.prodotti || typeof firebaseData === 'object') {
-                // Raggruppa per categoria se presente, altrimenti metti in "Prodotti"
+            // Se il bot ha salvato in formato numerato
+            else {
                 const grouped = {};
                 
                 for (const key in firebaseData) {
-                    if (key === 'prodotti') {
-                        const prods = firebaseData[key];
-                        for (const id in prods) {
-                            const p = prods[id];
-                            const catName = p.categoria || p.category || "Prodotti";
-                            if (!grouped[catName]) grouped[catName] = [];
-                            grouped[catName].push({
-                                name: p.nome || p.name,
-                                price: p.prezzo || p.price,
-                                description: p.descrizione || p.description || ""
-                            });
-                        }
-                    } else if (!isNaN(key)) { // Se sono numeri (formato bot)
-                        const p = firebaseData[key];
-                        const catName = "Whisky"; // o rileva da altri campi
+                    if (key.startsWith('_') || key === 'categorie') continue;
+                    
+                    const p = firebaseData[key];
+                    if (!p || typeof p !== 'object') continue;
+                    
+                    let catName = p.categoria || p.category || "Prodotti";
+                    
+                    // Se la categoria è "Food" o contiene sottocategorie
+                    if (catName.toLowerCase().startsWith('food')) {
+                        const subcatName = p.sottocategoria || p.subcategory || "Panini";
+                        if (!grouped['Food']) grouped['Food'] = {};
+                        if (!grouped['Food'][subcatName]) grouped['Food'][subcatName] = [];
+                        
+                        grouped['Food'][subcatName].push({
+                            name: p.nome || p.name || "Prodotto senza nome",
+                            price: typeof p.prezzo === 'number' ? p.prezzo : (typeof p.price === 'number' ? p.price : 0),
+                            description: p.descrizione || p.description || ""
+                        });
+                    } else {
                         if (!grouped[catName]) grouped[catName] = [];
                         grouped[catName].push({
-                            name: p.nome || p.name,
-                            price: p.prezzo || p.price,
+                            name: p.nome || p.name || "Prodotto senza nome",
+                            price: typeof p.prezzo === 'number' ? p.prezzo : (typeof p.price === 'number' ? p.price : 0),
                             description: p.descrizione || p.description || ""
                         });
                     }
                 }
                 
-                for (const [catName, items] of Object.entries(grouped)) {
+                // Converte in array categorie
+                for (const [catName, data] of Object.entries(grouped)) {
                     if (!isValidCategory(catName)) continue;
-                    categories.push({
-                        id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                        name: catName,
-                        icon: getIconForCategory(catName),
-                        items: items
-                    });
+                    
+                    if (catName === 'Food' && typeof data === 'object' && !Array.isArray(data)) {
+                        // Food con sottocategorie
+                        const subcategories = [];
+                        for (const [subName, items] of Object.entries(data)) {
+                            subcategories.push({
+                                name: subName,
+                                items: items
+                            });
+                        }
+                        
+                        categories.push({
+                            id: 'food',
+                            name: 'Food',
+                            icon: '🍽️',
+                            subcategories: subcategories
+                        });
+                    } else {
+                        // Categoria normale
+                        categories.push({
+                            id: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                            name: catName,
+                            icon: getIconForCategory(catName),
+                            items: Array.isArray(data) ? data : []
+                        });
+                    }
                 }
             }
             
@@ -1017,36 +1136,47 @@
             console.log("Dati ricevuti da Firebase:", firebaseData);
             
             if (!firebaseData) {
-                console.log("Nessun dato Firebase ricevuto");
+                console.log("Nessun dato Firebase ricevuto, uso dati locali");
+                generateMenu();
+                generateMenuOverlay();
                 return;
             }
             
-            // Converte i dati del bot nel formato del sito
             const newCategories = convertBotDataToSiteFormat(firebaseData);
             
             if (newCategories.length > 0) {
                 console.log("Categorie convertite:", newCategories);
+                
+                // Unisci le nuove categorie con quelle esistenti
+                // Mantieni Food locale se non presente in Firebase
+                const hasFoodInFirebase = newCategories.find(c => c.id === 'food');
+                if (!hasFoodInFirebase) {
+                    const localFood = menuData.categories.find(c => c.id === 'food');
+                    if (localFood) {
+                        newCategories.unshift(localFood);
+                    }
+                }
+                
                 menuData.categories = newCategories;
                 
-                // Rigenera il menu
                 generateMenu();
                 generateMenuOverlay();
                 
-                // Aggiorna timestamp
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
                     const now = new Date().toLocaleTimeString();
                     footerStatus.textContent = `Aggiornato: ${now}`;
                 }
                 
-                // Mostra indicatore
                 const syncStatus = document.getElementById('syncStatus');
                 if (syncStatus) {
                     syncStatus.classList.add('active');
                     setTimeout(() => syncStatus.classList.remove('active'), 2000);
                 }
             } else {
-                console.log("Nessuna categoria valida trovata nei dati Firebase");
+                console.log("Nessuna categoria valida trovata, uso dati locali");
+                generateMenu();
+                generateMenuOverlay();
             }
         }
         
@@ -1056,20 +1186,17 @@
         
         function initFirebase() {
             try {
-                // Usa onSnapshot per aggiornamenti in tempo reale
                 db.collection('menu').doc('caldarelli').onSnapshot((doc) => {
                     if (doc.exists) {
                         console.log("Snapshot Firebase ricevuto:", doc.data());
                         mergeMenuData(doc.data());
                     } else {
                         console.log("Documento Firebase non esiste, uso dati locali");
-                        // Se non esiste il documento, usa i dati di default
                         generateMenu();
                         generateMenuOverlay();
                     }
                 }, (error) => {
                     console.error("Errore Firebase:", error);
-                    // In caso di errore, usa dati locali
                     generateMenu();
                     generateMenuOverlay();
                 });
@@ -1198,13 +1325,15 @@
                 `;
                 
                 let itemIndex = 0;
-                if (cat.subcategories) {
+                if (cat.subcategories && cat.subcategories.length > 0) {
                     cat.subcategories.forEach(sub => {
                         html += `<div class="subcategory">
                             <h3 class="subcategory-title">${sub.name}</h3>`;
-                        sub.items.forEach((item) => {
-                            html += createItemHTML(item, itemIndex++);
-                        });
+                        if (sub.items && sub.items.length > 0) {
+                            sub.items.forEach((item) => {
+                                html += createItemHTML(item, itemIndex++);
+                            });
+                        }
                         html += '</div>';
                     });
                 } else if (cat.items && cat.items.length > 0) {
@@ -1275,7 +1404,7 @@
         
         // Avvio
         createParticles();
-        initFirebase(); // Questo ora gestisce anche il menu iniziale
+        initFirebase();
     </script>
 </body>
 </html>
