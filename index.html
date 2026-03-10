@@ -903,7 +903,7 @@
         }
         
         // ==========================================
-        // DATI LOCALI - SOLO 8 PANINI SENZA DUPLICATI
+        // DATI LOCALI
         // ==========================================
         
         let menuData = {
@@ -1067,15 +1067,59 @@
                     "id": "food",
                     "name": "Food",
                     "icon": "🍽️",
-                    "items": [
-                        {"name": "Light", "price": 5.0, "description": "Verdure grigliate, provola e hamburger"},
-                        {"name": "Porchetta Crunch", "price": 6.0, "description": "Porchetta, patatine e insalata"},
-                        {"name": "Caldarelli", "price": 7.0, "description": "Pomodoro, insalata, hamburger, provola, bacon e patatine"},
-                        {"name": "Americano", "price": 5.0, "description": "Hamburger, provola e patatine"},
-                        {"name": "Istanbul", "price": 6.0, "description": "Patate fritte e kebab"},
-                        {"name": "Orto Saporito", "price": 6.0, "description": "Porchetta, provola, melanzane, zucchine e patate grigliati"},
-                        {"name": "Campagnolo", "price": 5.0, "description": "Salsicce, friarielli e provola"},
-                        {"name": "Tricolore", "price": 5.0, "description": "Panino con melanzane sott'olio e prosciutto crudo"}
+                    "subcategories": [
+                        {
+                            "name": "Taglieri",
+                            "items": [
+                                {"name": "Tagliere salumi e formaggi", "price": 10.0}
+                            ]
+                        },
+                        {
+                            "name": "Patatine",
+                            "items": [
+                                {"name": "Patatine fritte classica", "price": 5.0},
+                                {"name": "Patatine cacio e pepe", "price": 6.0},
+                                {"name": "Patatine wurstel e mozzarella", "price": 6.0},
+                                {"name": "Patatine con kebab", "price": 6.5},
+                                {"name": "Patatine con porchetta", "price": 6.5}
+                            ]
+                        },
+                        {
+                            "name": "Specialità",
+                            "items": [
+                                {"name": "Fritto misto", "price": 6.0}
+                            ]
+                        },
+                        {
+                            "name": "Pizza in Pala",
+                            "items": [
+                                {"name": "Margherita", "price": 6.0},
+                                {"name": "Marinara Sbagliata", "price": 5.5},
+                                {"name": "Mortazza", "price": 8.0},
+                                {"name": "Crudo e Bufala", "price": 8.0},
+                                {"name": "Cotto Caldarelli", "price": 7.5}
+                            ]
+                        },
+                        {
+                            "name": "Frutta",
+                            "items": [
+                                {"name": "Tagliata di frutta", "price": 5.0},
+                                {"name": "Barchetta di Ananas", "price": 4.0}
+                            ]
+                        },
+                        {
+                            "name": "Panini",
+                            "items": [
+                                {"name": "Light", "price": 5.0, "description": "Verdure grigliate, provola e hamburger"},
+                                {"name": "Porchetta Crunch", "price": 6.0, "description": "Porchetta, patatine e insalata"},
+                                {"name": "Caldarelli", "price": 7.0, "description": "Pomodoro, insalata, hamburger, provola, bacon e patatine"},
+                                {"name": "Americano", "price": 5.0, "description": "Hamburger, provola e patatine"},
+                                {"name": "Istanbul", "price": 6.0, "description": "Patate fritte e kebab"},
+                                {"name": "Orto Saporito", "price": 6.0, "description": "Porchetta, provola, melanzane, zucchine e patate grigliati"},
+                                {"name": "Campagnolo", "price": 5.0, "description": "Salsicce, friarielli e provola"},
+                                {"name": "Tricolore", "price": 5.0, "description": "Panino con melanzane sott'olio e prosciutto crudo"}
+                            ]
+                        }
                     ]
                 },
                 {
@@ -1751,3 +1795,4 @@
     </script>
 </body>
 </html>
+
