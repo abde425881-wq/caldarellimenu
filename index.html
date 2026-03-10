@@ -903,7 +903,7 @@
         }
         
         // ==========================================
-        // DATI LOCALI - FOOD CON TUTTI I PANINI COMPLETI
+        // DATI LOCALI - FOOD CON TUTTI I PANINI CORRETTI
         // ==========================================
         
         let menuData = {
@@ -940,6 +940,15 @@
                                 {"name": "Bacon King", "price": 7.0, "description": "Doppio bacon, doppio hamburger e provola"},
                                 {"name": "Chicken Burger", "price": 7.0, "description": "Petto di pollo impanato, insalata e pomodoro"},
                                 {"name": "BBQ Ranch", "price": 7.0, "description": "Hamburger, bacon, cheddar, salsa BBQ e ranch"}
+                            ]
+                        },
+                        {
+                            "name": "Panini €8.00",
+                            "items": [
+                                {"name": "Crispy Chicken", "price": 8.0, "description": "Pollo croccante, bacon, cheddar e salsa speciale"},
+                                {"name": "Double Cheese", "price": 8.0, "description": "Doppio hamburger, doppio cheddar, bacon e cipolla croccante"},
+                                {"name": "Mexicano", "price": 8.0, "description": "Hamburger piccante, jalapeños, cheddar e salsa messicana"},
+                                {"name": "Tonno", "price": 8.0, "description": "Hamburger di tonno, pomodoro, insalata e salsa tartara"}
                             ]
                         },
                         {
@@ -1297,18 +1306,27 @@
         }
         
         function createItemHTML(item, index) {
+            // Verifica che l'item sia valido
+            if (!item || !item.name) {
+                console.warn('Item invalido trovato:', item);
+                return '';
+            }
+            
             let priceHTML = '';
             if (typeof item.price === 'number') {
                 priceHTML = `<span class="price">€${item.price.toFixed(2)}</span>`;
             } else {
-                priceHTML = `<span class="price">${item.price}</span>`;
+                priceHTML = `<span class="price">${item.price || 'N/D'}</span>`;
             }
+            
+            // Assicurati che description sia sempre una stringa
+            const description = item.description || '';
             
             return `
                 <div class="menu-item" style="animation-delay: ${index * 0.05}s">
                     <div class="item-info">
                         <div class="item-name">${item.name}</div>
-                        ${item.description ? `<div class="item-description">${item.description}</div>` : ''}
+                        ${description ? `<div class="item-description">${description}</div>` : ''}
                     </div>
                     <div class="item-price">${priceHTML}</div>
                 </div>
@@ -1341,18 +1359,28 @@
                 let itemIndex = 0;
                 if (cat.subcategories && cat.subcategories.length > 0) {
                     cat.subcategories.forEach(sub => {
+                        // Verifica che la sottocategoria sia valida
+                        if (!sub || !sub.name) return;
+                        
                         html += `<div class="subcategory">
                             <h3 class="subcategory-title">${sub.name}</h3>`;
-                        if (sub.items && sub.items.length > 0) {
+                        
+                        if (sub.items && Array.isArray(sub.items) && sub.items.length > 0) {
                             sub.items.forEach((item) => {
-                                html += createItemHTML(item, itemIndex++);
+                                const itemHTML = createItemHTML(item, itemIndex++);
+                                if (itemHTML) {
+                                    html += itemHTML;
+                                }
                             });
                         }
                         html += '</div>';
                     });
                 } else if (cat.items && cat.items.length > 0) {
                     cat.items.forEach((item) => {
-                        html += createItemHTML(item, itemIndex++);
+                        const itemHTML = createItemHTML(item, itemIndex++);
+                        if (itemHTML) {
+                            html += itemHTML;
+                        }
                     });
                 }
                 
